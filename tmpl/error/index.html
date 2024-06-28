@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>404 Error</title>
+    <style>
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            padding-top: 10%; 
+        }
+        h1 {
+            font-size: 5rem; 
+            margin-bottom: 2%; 
+        }
+        p {
+            font-size: 3rem; 
+            margin-bottom: 8%; 
+        }
+        .console {
+            background-color: #333;
+            color: #0f0;
+            padding: 5%; 
+            margin: 0 auto;
+            width: 40vw; 
+            border-radius: 4%;
+        }
+        .console-input,
+        .console-output {
+            font-family: 'Courier New', monospace;
+            font-size: 2rem; 
+            color: #0f0;
+        }
+        .console-output {
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <h1>404 Error</h1>
+    <p>Page not found</p>
+    <div class="console">
+        <span class="console-output">&gt; 404 Error: {{ .Page }} not found</span><br>
+        <span class="console-input">> Please check the URL and try again</span>
+    </div>
+</body>
+</html>
+
+
+
+
+
+ 
