@@ -40,3 +40,17 @@ init:
 		@sudo a2ensite mvc-lms-sds.conf
 		@sudo systemctl restart apache2
 		@echo "Done!"
+
+migration_create:
+		  migrate create -ext=sql -dir=database/migration -seq init
+
+migration_up:
+		@read -p "Enter version: " v; \
+		migrate -path database/migration/ -database "mysql://LMSxeon:password@tcp(localhost:3306)/LMS?" -verbose up	$$v
+migration_down:
+		@read -p "Enter version: " v; \
+		migrate -path database/migration/ -database "mysql://LMSxeon:password@tcp(localhost:3306)/LMS?" -verbose down $$v
+migration_fix:
+		@read -p "Enter version: " v; \
+		migrate -path database/migration/ -database "mysql://LMSxeon:password@tcp(localhost:3306)/LMS?" force $$v
+
