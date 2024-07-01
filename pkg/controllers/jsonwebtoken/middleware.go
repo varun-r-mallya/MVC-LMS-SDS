@@ -52,7 +52,6 @@ func Middleware(path string, next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		validity, err := GetCookieHandler(r)
 		if err != nil {
-			neem.Spotlight(err, "Error in Middleware")
 			http.Redirect(w, r, "/noaccess", http.StatusFound)
 			return
 		}
