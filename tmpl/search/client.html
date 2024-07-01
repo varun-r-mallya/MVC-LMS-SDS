@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>View Book</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <style>
+        body {
+            background-color: #000;
+            color: #03ff0f;
+            font-family: 'Courier New', monospace;
+        }
+        .container {
+            margin-top: 20px;
+        }
+        .form-control {
+            background-color: #000000;
+            color: #ffffff;
+            
+            border: 1px solid #fff;
+        }
+        .form-control::placeholder {
+            color: #a3a3a3;
+        }
+        .form-control:focus {
+            background-color: #000000;
+            color: white;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+        .btn-primary:hover {
+            background-color: #0069d9;
+            border-color: #0062cc;
+        }
+        #stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -100;
+        }
+        .star {
+            position: absolute;
+            background-color: #dcfd8e;
+            border-radius: 50%;
+            animation: twinkle linear infinite;
+        }
+        @keyframes twinkle {
+            0% { opacity: 0; transform: translateY(0); }
+            100% { opacity: 1; transform: translateY(-100vh); animation-duration: 0.5s; }
+        }
+        .separator {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        h3{
+            color: #fdfdfd;
+        }
+        text{
+            color: #b9ddbb;
+        }
+        #logoutbutton {
+            position: fixed;
+            bottom: 2%;
+            left: 2%;
+            z-index: 9999;
+        }
+        .pasttransactions {
+            overflow-y: scroll;
+            height: 40vh;
+        }
+
+    </style>
+</head>
+<body>
+    <div id="stars"></div>
+    <div class="container">
+        <div class="separator">
+            <h1>View book</h1>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <h2>Book Details</h2>
+                <br>
+                <div>
+                    <h3>Book ID: <text><%=book.B_Id%></text></h3>
+                    <h3>Book Title: <text><%=book.BookName%></text></h3>
+                    <h3>Author: <text><%=book.Author%></text></h3>
+                    <h3>Genre: <text><%=book.Genre%></text></h3>
+                    <h3>Due Time: <text><%=book.NumberofDays%> days</text></h3>
+                    <h3>Number of Available Copies: <text><%=book.NumberofCopiesAvailable%></text></h3>
+                    <h3>Total Number of Copies: <text><%=book.NumberofCopies%></text></h3>
+                    <h3>Number of Copies Borrowed: <text><%=book.NumberofCopiesBorrowed%></text></h3>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <h2>Past Transaction Details</h2>
+                <br>
+                <div class="pasttransactions">
+                    <% for(let i = 0; i < transactions.length; i++) { %>
+                    <div class="card" style="background-color: #333; color: #fff; margin-bottom: 10px;">
+                        <div class="card-body">
+                            <h5 class="card-title" style="color:#03ff0f"><%=transactions[i].BookName%></h5>
+                            <p class="card-text" style="color:#2fe0ff">Author: <%=transactions[i].Author%></p>
+                            <% if (transactions[i].CheckOutAccepted === 1) { %>
+                                
+                                <p class="card-text" style="color:#a218ff">Borrowed on: <%=transactions[i].DateBorrowed%></p>
+                            <% } else {%>
+                                <p class="card-text" style="color:#ffffff">Check Out Status: Not accepted</p>
+                            <% } %>
+                            <% if (transactions[i].CheckInAccepted === 1) { %>
+                                <p class="card-text" style="color:#a218ff">Returned on: <%=transactions[i].DateReturned%></p>
+                            <% } else {%>
+                                <p class="card-text" style="color:#ffffff">Check In Status: Not accepted</p>
+                            <% } %>
+                            <p class="card-text" style="color:#ffffff">Time in days for return: <%=transactions[i].NumberofDays%></p>
+                        </div>
+                    </div>
+                    <% } %>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="separator">
+            <h1>Book Actions</h1>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div id="message" class="mt-3"></div>
+                <button type="button" class="btn btn-primary" onclick="CheckOut()">Check Out</button>
+                <button type="button" class="btn btn-primary" onclick="CheckIn()">Check In</button>
+            </div>
+        </div>
+    <div id="logoutbutton" style="flex-direction: row;">
+        <button type="button" class="btn btn-danger" onclick="window.location.href='/client/dashboard'">Back</button>
+    </div>
+</body>
+<script>
+    const message = document.getElementById('message');
+
+    function CheckOut() {
+        const bookID = '<%=book.B_Id%>';
+        const RequestOptions = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ bookID })
+        };
+        fetch('/client/checkout', RequestOptions)
+            .then(async response => {
+                if (response.ok) {
+                    const res = await response.json().then(data => data.message)
+                    console.log(res);
+                    alert(res);
+                    window.location.reload();
+                } else {
+                    await response.json().then(error => {
+                        message.innerText = error.message;
+                    });
+                }
+            
+            })
+    }
+
+    function CheckIn() {
+        const bookID = '<%=book.B_Id%>';
+        const RequestOptions = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ bookID })
+        };
+        fetch('/client/checkin', RequestOptions)
+            .then(async response => {
+                if (response.ok) {
+                    const res = await response.json().then(data => data.message)
+                    console.log(res);
+                    alert(res);
+                    window.location.reload();
+                } else {
+                    await response.json().then(error => {
+                        message.innerText = error.message;
+                    });
+                }
+            
+            })
+    }
+    
+</script>
+</html>

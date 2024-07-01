@@ -8,6 +8,7 @@ import (
 	"github.com/varun-r-mallya/MVC-LMS-SDS/pkg/neem"
 	"github.com/varun-r-mallya/MVC-LMS-SDS/pkg/views"
 	"github.com/varun-r-mallya/MVC-LMS-SDS/pkg/types"
+	"github.com/varun-r-mallya/MVC-LMS-SDS/pkg/passwords"
 )
 
 func Register(w http.ResponseWriter, r *http.Request) {
@@ -52,17 +53,19 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	hashed_password, salt := passwords.PasswordTransform(password)
+
 	register := types.UserRegister{
 		UserName:       username,
-		HashedPassword: password,
-		Salt:           password,
+		HashedPassword: hashed_password,
+		Salt:           salt,
 		IsAdmin:        true,
 	}
 
-	err, success := models.RegisterUser(register)
+	success, err := models.RegisterUser(register)
 	if err != nil {
-		neem.Spotlight(err, "could not register user")
-		toSend := types.Message{Message: "Could not register user"}
+		neem.Log("could not register user")
+		toSend := types.Message{Message: err.Error()}
 		b, err := json.Marshal(toSend)
 		if err != nil {
 			neem.Spotlight(err, "could not marshal message")
@@ -81,9 +84,4 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, string(b), http.StatusOK)
 		return
 	}
-
-
-
-
-
 }

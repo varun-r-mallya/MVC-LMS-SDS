@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/varun-r-mallya/MVC-LMS-SDS/pkg/controllers"
+	"github.com/varun-r-mallya/MVC-LMS-SDS/pkg/controllers/jsonwebtoken"
 	"github.com/varun-r-mallya/MVC-LMS-SDS/pkg/neem"
 )
 
@@ -12,8 +13,15 @@ func Server(){
 	http.HandleFunc("/admin", controllers.Admin)
 	http.HandleFunc("/client", controllers.Client)
 	http.HandleFunc("/register", controllers.Register)
-	http.HandleFunc("/api/register", controllers.RegisterUser)
+	http.HandleFunc("/noaccess", controllers.NoAccess)
 
-	neem.Log("Find page at http://localhost:3000/ or http://xeonlib.org")
+	http.HandleFunc("/api/register", controllers.RegisterUser)
+	http.HandleFunc("/admin/api/login", controllers.AdminLogin)
+	http.HandleFunc("/client/api/login", controllers.ClientLogin)
+
+	http.HandleFunc("/admin/dashboard", jsonwebtoken.Middleware("/admin/dashboard", controllers.AdminDashboard))
+	http.HandleFunc("/client/dashboard", jsonwebtoken.Middleware("/client/dashboard", controllers.ClientDashboard))
+
+	neem.Log("Find page at http://localhost:8080/ or http://xeonlib.org")
 	neem.Critial(http.ListenAndServe(":8080", nil), "Error starting server")
 }

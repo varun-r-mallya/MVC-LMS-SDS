@@ -92,7 +92,14 @@
   </div>
 
   <script>
-
+    if (document.cookie.includes('token')) {
+        const type = localStorage.getItem('type');    
+        if(type === 'admin'){
+            location.href = '/admin/dashboard';
+        } else {
+            location.href = '/client/dashboard';
+        }
+    }
     const stars = document.getElementById('stars');
     for (let i = 0; i < 100; i++) {
       const star = document.createElement('div');

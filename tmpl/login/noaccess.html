@@ -45,6 +45,18 @@
         <span class="console-input">> Please check the URL and try again</span>
     </div>
 </body>
+<script>
+    document.cookie.split(";").forEach(function(c) {
+        var name = c.split("=")[0].trim();
+        document.cookie = name + "=undefined; expires=" + new Date().toUTCString() + "; path=/";
+        });
+    localStorage.clear();
+    setTimeout(() => {
+        window.location.href = '/';
+    }, 5000);
+    
+    
+</script>
 </html>
 
 

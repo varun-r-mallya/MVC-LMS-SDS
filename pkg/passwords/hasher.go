@@ -15,15 +15,15 @@ func hashPassword(password string, salt string) (string, string) {
 }
 
 
-func SaltingPassword(password string, username string, user_type string) (string, string) {
+func SaltingPassword(password string) (string, string) {
 	GlobalSalt := os.Getenv("GLOBALSALT")
 	salt := saltgen()
 	transformed_salt := (salt + GlobalSalt)
 	return password+transformed_salt, salt
 }
 
-func PasswordTransform(password string, username string, user_type string) (string, string) {
-	return hashPassword(SaltingPassword(password, username, user_type))
+func PasswordTransform(password string) (string, string) {
+	return hashPassword(SaltingPassword(password))
 }
 
 func ComparePasswords(password string, hashed_password string, salt string) bool {
