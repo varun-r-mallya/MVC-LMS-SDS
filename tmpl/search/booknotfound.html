@@ -30,13 +30,12 @@
 <body>
     <div class="console">
             <h1 style="align-content: center;">
-                Book <%=name%> not found
+                Book {{.Title}} not found
             </h1>
         <button class="btn btn-primary" onclick="goBack()">Back</button>
     </div>
 
     <script>
-        // Copy and paste relevant JavaScript code here
         function goBack() {
             window.history.back();
         }

@@ -172,3 +172,26 @@ func GetCheckRequests() (types.AdminData, error){
 	}
 	return types.AdminData{ConvertRequestClients: CliReq, CheckInApprovals: CheckInApprovals , CheckOutApprovals: CheckOutApprovals}, nil
 }
+
+func GetBook(title string) (types.Book, error) {
+	db, err := Connection()
+	if err != nil {
+		neem.Critial(err, "error connecting to the database")
+		return types.Book{}, err
+	}
+	rows, err := db.Query("SELECT * FROM booklist WHERE Title = ?", title)
+	if err != nil {
+		neem.DBError("error executing query", err)
+		return types.Book{}, err
+	}
+	defer rows.Close()
+	var book types.Book
+	for rows.Next() {
+		err := rows.Scan(&book.B_Id, &book.Title, &book.Author, &book.Genre, &book.NumberofCopies, &book.NumberofCopiesAvailable, &book.NumberofCopiesBorrowed, &book.DueTime)
+		if err != nil {
+			neem.DBError("error scanning row", err)
+			return types.Book{}, err
+		}
+	}
+	return book, nil
+}

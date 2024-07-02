@@ -8,7 +8,7 @@ import (
 
 	"github.com/varun-r-mallya/MVC-LMS-SDS/pkg/models"
 	"github.com/varun-r-mallya/MVC-LMS-SDS/pkg/neem"
-	"github.com/varun-r-mallya/MVC-LMS-SDS/pkg/passwords"
+	"github.com/varun-r-mallya/MVC-LMS-SDS/pkg/controllers/passwords"
 	"github.com/varun-r-mallya/MVC-LMS-SDS/pkg/types"
 	"github.com/varun-r-mallya/MVC-LMS-SDS/pkg/controllers/jsonwebtoken"
 	"github.com/varun-r-mallya/MVC-LMS-SDS/pkg/views"

@@ -86,14 +86,14 @@
                 <h2>Book Details</h2>
                 <br>
                 <div>
-                    <h3>Book ID: <text><%=book.B_Id%></text></h3>
-                    <h3>Book Title: <text><%=book.BookName%></text></h3>
-                    <h3>Author: <text><%=book.Author%></text></h3>
-                    <h3>Genre: <text><%=book.Genre%></text></h3>
-                    <h3>Due Time: <text><%=book.NumberofDays%> days</text></h3>
-                    <h3>Number of Available Copies: <text><%=book.NumberofCopiesAvailable%></text></h3>
-                    <h3>Total Number of Copies: <text><%=book.NumberofCopies%></text></h3>
-                    <h3>Number of Copies Borrowed: <text><%=book.NumberofCopiesBorrowed%></text></h3>
+                    <h3>Book ID: <text>{{.Book.B_Id}}</text></h3>
+                    <h3>Book Title: <text>{{.Book.Title}}</text></h3>
+                    <h3>Author: <text>{{.Book.Author}}</text></h3>
+                    <h3>Genre: <text>{{.Book.Genre}}</text></h3>
+                    <h3>Due Time: <text>{{.Book.DueTime}} days</text></h3>
+                    <h3>Number of Available Copies: <text>{{.Book.NumberofCopiesAvailable}}</text></h3>
+                    <h3>Total Number of Copies: <text>{{.Book.NumberofCopies}}</text></h3>
+                    <h3>Number of Copies Borrowed: <text>{{.Book.NumberofCopiesBorrowed}}</text></h3>
                 </div>
             </div>
             <div class="col-md-6">

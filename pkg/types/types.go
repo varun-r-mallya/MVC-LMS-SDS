@@ -60,6 +60,12 @@ type LibraryData struct {
 	NumberofCopies int `json:"numberofcopies"`
 	NumberofCopiesAvailable int `json:"numberofcopiesavailable"`
 	NumberofCopiesBorrowed int `json:"numberofcopiesborrowed"`
+
+}
+type AdminData struct {
+	ConvertRequestClients []string `json:"convertrequestclients"`
+	CheckInApprovals []Transactions `json:"checkinapprovals"`
+	CheckOutApprovals []Transactions `json:"checkoutapprovals"`
 }
 
 type PageDataAdmin struct {
@@ -85,8 +91,8 @@ type Transactions struct {
 	OverdueFine int `json:"overduefine"`
 }
 
-type AdminData struct {
-	ConvertRequestClients []string `json:"convertrequestclients"`
-	CheckInApprovals []Transactions `json:"checkinapprovals"`
-	CheckOutApprovals []Transactions `json:"checkoutapprovals"`
+
+type ClientBookView struct {
+	Book Book	`json:"book"`
+	Transactions Transactions `json:"transactions"`
 }

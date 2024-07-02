@@ -1,18 +1,16 @@
 package controllers
 
 import (
-	"net/http"
-	"io"
 	"encoding/json"
+	"io"
+	"net/http"
 
-	"github.com/varun-r-mallya/MVC-LMS-SDS/pkg/neem"
-	"github.com/varun-r-mallya/MVC-LMS-SDS/pkg/views"
-	"github.com/varun-r-mallya/MVC-LMS-SDS/pkg/types"
-	"github.com/varun-r-mallya/MVC-LMS-SDS/pkg/models"
-	"github.com/varun-r-mallya/MVC-LMS-SDS/pkg/passwords"
 	"github.com/varun-r-mallya/MVC-LMS-SDS/pkg/controllers/jsonwebtoken"
-
-
+	"github.com/varun-r-mallya/MVC-LMS-SDS/pkg/models"
+	"github.com/varun-r-mallya/MVC-LMS-SDS/pkg/neem"
+	"github.com/varun-r-mallya/MVC-LMS-SDS/pkg/controllers/passwords"
+	"github.com/varun-r-mallya/MVC-LMS-SDS/pkg/types"
+	"github.com/varun-r-mallya/MVC-LMS-SDS/pkg/views"
 )
 
 func Client(w http.ResponseWriter, r *http.Request) {
@@ -102,4 +100,27 @@ func ClientDashboard(w http.ResponseWriter, r *http.Request) {
 		Books: Books,
 	}
 	views.ClientDashboard(w, r, pageDataClient)
+}
+
+func ClientViewBook(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
+		return
+	}
+	query := r.URL.Query()
+	neem.Log("Client view book accessed")
+	title := query.Get("search")
+	if title == "" {
+		http.Error(w, "Bad Request", http.StatusBadRequest)
+		return
+	}
+	bookdata, err := models.GetBook(title)
+	data := types.ClientBookView{
+		Book: bookdata,
+	}
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+	views.ClientViewBook(w, r, data)
 }
