@@ -18,9 +18,9 @@ type RegisterUserTest struct {
 }
 
 var RegisterUserTests = []RegisterUserTest{
-    {types.UserRegister{UserName: "varun", HashedPassword: "password", Salt: "salt", IsAdmin: false}, nil, true},
-    {types.UserRegister{UserName: "varun", HashedPassword: "password", Salt: "salt", IsAdmin: false}, fmt.Errorf("user already exists"), false},
-    {types.UserRegister{UserName: "newboi", HashedPassword: "password", Salt: "salt", IsAdmin: false}, nil, true},
+    {types.UserRegister{UserName: "like absolutely really really new user", HashedPassword: "password", Salt: "salt", IsAdmin: false}, nil, true},
+    {types.UserRegister{UserName: "like absolutely really really new user", HashedPassword: "password", Salt: "salt", IsAdmin: false}, fmt.Errorf("user already exists"), false},
+    {types.UserRegister{UserName: "like absolutely really really new user2", HashedPassword: "password", Salt: "salt", IsAdmin: false}, nil, true},
 }
 
 
