@@ -86,5 +86,19 @@ func AdminDashboard(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	neem.Log("Admin dashboard accessed")
-	views.AdminDashboard(w, r)
+	Librarydata, err := models.GetLibraryData()
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+	AdminData, err := models.GetCheckRequests()
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+	pageDataAdmin := types.PageDataAdmin{
+		LibraryData: Librarydata,
+		AdminData: AdminData,
+	}
+	views.AdminDashboard(w, r, pageDataAdmin)
 }

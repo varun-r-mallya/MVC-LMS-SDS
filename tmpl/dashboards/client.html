@@ -143,7 +143,7 @@
                 <br>
                 <h2> Transaction History</h2>
                 <div id="transactions">
-                    <% for(let i = 0; i < transactions.length; i++) { %>
+                    <% for (let i = 0; i < transactions.length; i++) { %>
                         <a href="/client/viewbook?search=<%=transactions[i].BookName%>">
                             <div class="card" style="background-color: #333; color: #fff; margin-bottom: 10px;">
                                 <div class="card-body">
@@ -182,18 +182,18 @@
             <div class="container2" style="display: flex; flex-direction: column;">
                 <h2>Explore</h2>
                 <div class="explore">
-                    <% for(let i = 0; i < displayList.length; i++) { %>
-                        <a href="/client/viewbook?search=<%=displayList[i].BookName%>" class="card-link">
+                    {{range .Books}}
+                        <a href="/client/viewbook?search={{.Title}}" class="card-link">
                             <div class="card" style="background-color: #333; color: #fff; margin-bottom: 10px;">
                                 <div class="card-body">
-                                    <h5 class="card-title" style="color:#03ff0f"><%=displayList[i].BookName%></h5>
-                                    <p class="card-text" style="color:#2fe0ff">Author: <%=displayList[i].Author%></p>
-                                    <p class="card-text" style="color:#ffffff">Genre: <%=displayList[i].Genre%></p>
-                                    <p class="card-text" style="color:#ffffff">Number of Copies: <%=displayList[i].NumberofCopiesAvailable%></p>
+                                    <h5 class="card-title" style="color:#03ff0f">{{.Title}}</h5>
+                                    <p class="card-text" style="color:#2fe0ff">Author: {{.Author}}</p>
+                                    <p class="card-text" style="color:#ffffff">Genre: {{.Genre}}</p>
+                                    <p class="card-text" style="color:#ffffff">Number of Copies: {{.NumberofCopiesAvailable}}</p>
                                 </div>
                             </div>
                         </a>
-                    <% } %>
+                    {{end}}
                 </div>
             </div>
         </div>
@@ -205,7 +205,7 @@
 </body>
 <script>
         function AdminAccess() {
-            fetch('/client/previleges', {
+            fetch('/client/api/requestadmin', {
                 method: 'POST'
             }).then(async function(response) {
                 if (response.ok) {
@@ -228,7 +228,7 @@
                                         
         datasets: [{
             label: 'Booklist',
-            data: [Number("<%=NumberofCopies%>"), Number("<%=NumberofCopiesBorrowed%>"), Number("<%=NumberofCopiesAvailable%>")],
+            data: [Number("{{.LibraryData.NumberofCopies}}"), Number("{{.LibraryData.NumberofCopiesBorrowed}}"), Number("{{.LibraryData.NumberofCopiesAvailable}}")],
             backgroundColor: [
             'rgb(255, 99, 132)',
             'rgb(54, 162, 235)',
@@ -364,7 +364,11 @@
 }
 
 
-var books =  "<%=booklist %>".split(",");
+// var books = [];
+// {{range .LibraryData.Books}}
+// books.push("{{.}}");
+// {{end}}
+
 
 
 autocomplete(document.getElementById("myInput"), books);

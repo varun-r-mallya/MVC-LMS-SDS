@@ -1,10 +1,11 @@
-package models
+package models_test
 
 import (
 	"fmt"
 	"testing"
 
 	"github.com/varun-r-mallya/MVC-LMS-SDS/pkg/types"
+    "github.com/varun-r-mallya/MVC-LMS-SDS/pkg/models"
 
     "github.com/joho/godotenv"
 )
@@ -31,7 +32,7 @@ func TestRegisterUser(t *testing.T) {
     }
 
 	for _, test := range RegisterUserTests {
-        success, err := RegisterUser(test.user)
+        success, err := models.RegisterUser(test.user)
         if err != nil && test.expectedError == nil {
             if err.Error() != test.expectedError.Error() {
                 t.Errorf("Expected error %s, but got %s", test.expectedError, err)

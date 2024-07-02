@@ -87,5 +87,19 @@ func ClientDashboard(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	neem.Log("Client dashboard accessed")
-	views.ClientDashboard(w, r)
+	Librarydata, err := models.GetLibraryData()
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+	Books, err := models.BooksList()
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+	pageDataClient := types.PageDataClient{
+		LibraryData: Librarydata,
+		Books: Books,
+	}
+	views.ClientDashboard(w, r, pageDataClient)
 }

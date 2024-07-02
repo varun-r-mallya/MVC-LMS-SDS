@@ -139,7 +139,7 @@
         <div class="row">
             <div class="col-md-6">
                 <h2>Add New Book</h2>
-                <form action="/admin/addbooks" method="post" id="addbooks">
+                <form action="/admin/api/addbooks" method="post" id="addbooks">
                     <div class="form-group">
                         <label for="title">Title</label>
                         <input type="text" class="form-control" id="title" placeholder="Enter title" required>
@@ -153,7 +153,7 @@
                         <input type="text" class="form-control" id="author" placeholder="Enter author" required>
                     </div>
                     <div class="form-group">
-                        <label for="due-time">Due Time (Days)</label>
+                        <label for="duetime">Due Time (Days)</label>
                         <input type="number" class="form-control" id="due-time" placeholder="Enter due time in days" required>
                     </div>
                     <div class="form-group">
@@ -176,53 +176,55 @@
         <div class="approval-section">
             <div class="checkins">
             <h2>Check-in Approvals</h2>
-            <% if(checkin.length == 0) { %>
-                <p>No check-in requests</p>
-            <% } else %>
-            <% for(let i = 0; i < checkin.length; i++) { %>
+            {{if .AdminData.CheckInApprovals}}
+            {{range .AdminData.CheckInApprovals}}
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title"><%= checkin[i].ClientID %></h5>
-                        <p class="card-text">Requesting check-in for <%= checkin[i].BookName %></p>
-                        <button class="btn btn-primary" onclick="HandleCheckIn(Number('<%=checkin[i].T_Id%>'), true)">Approve</button>
-                        <button class="btn btn-danger" onclick="HandleCheckIn(Number('<%=checkin[i].T_Id%>'), false)">Deny</button>
+                        <h5 class="card-title">{{.UserName}}</h5>
+                        <p class="card-text">Requesting check-in for {{.Title}}</p>
+                        <button class="btn btn-primary" onclick="HandleCheckIn({{.T_Id}}, true)">Approve</button>
+                        <button class="btn btn-danger" onclick="HandleCheckIn({{.T_Id}}, false)">Deny</button>
                     </div>
                 </div>
-            <% } %>
+            {{end}}
+        {{else}}
+            <p>No check-in requests</p>
+        {{end}}
         </div>
         <div class="approval-section">
             <div class="checkins">
             <h2>Check-out Approvals</h2>
-            <% if(checkout.length == 0) { %>
-                <p>No check-out requests</p>
-            <% } else %>
-            <% for(let i = 0; i < checkout.length; i++) { %>
+            {{if .AdminData.CheckOutApprovals}}
+            {{range .AdminData.CheckOutApprovals}}
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title"><%= checkout[i].ClientID %></h5>
-                        <p class="card-text">Requesting check-out for <%= checkout[i].BookName %></p>
-                        <button class="btn btn-primary" onclick="HandleCheckOut(Number('<%=checkout[i].T_Id%>'), true)">Approve</button>
-                        <button class="btn btn-danger" onclick="HandleCheckOut(Number('<%=checkout[i].T_Id%>'), false)">Deny</button>
+                        <h5 class="card-title">{{.UserName}}</h5>
+                        <p class="card-text">Requesting check-in for {{.Title}}</p>
+                        <button class="btn btn-primary" onclick="HandleCheckOut({{.T_Id}}, true)">Approve</button>
+                        <button class="btn btn-danger" onclick="HandleCheckOut({{.T_Id}}, false)">Deny</button>
                     </div>
                 </div>
-            <% } %>
+            {{end}}
+        {{else}}
+            <p>No check-out requests</p>
+        {{end}}
         </div>
         <div class="approval-section">
             <h2>Admin Requests</h2>
-            <% if(convertq.length == 0) { %>
-                <p>No admin requests</p>
-            <% } else { %>
-            <% for(let i = 0; i < convertq.length; i++) { %>
+                {{if .AdminData.ConvertRequestClients}}
+                {{range .AdminData.ConvertRequestClients}}
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">Client: <%=convertq[i].ClientID%></h5>
+                            <h5 class="card-title">Client: {{.}}</h5>
                             <p class="card-text">Requesting admin access</p>
-                            <button class="btn btn-primary" onclick="ApproveAdmin('<%=convertq[i].ClientID%>', true)">Approve</button>
-                            <button class="btn btn-danger" onclick="ApproveAdmin('<%=convertq[i].ClientID%>', false)">Deny</button>
+                            <button class="btn btn-primary" onclick="ApproveAdmin('{{.}}', true)">Approve</button>
+                            <button class="btn btn-danger" onclick="ApproveAdmin('{{.}}', false)">Deny</button>
                         </div>
                     </div>
-            <% } %>
-            <% } %>
+                {{end}}
+                {{else}}
+                    <p>No admin requests</p>
+                {{end}}
         </div>
     </div>
     </div>
@@ -301,7 +303,7 @@
                 },
                 body: JSON.stringify(bookData)
             };
-            const response = await fetch('/admin/addbooks', requestOptions);
+            const response = await fetch('/admin/api/addbooks', requestOptions);
             if (response.ok) { 
             if (response.redirected) {
                 window.location.href = response.url;
@@ -325,7 +327,7 @@
                                         
         datasets: [{
             label: 'Booklist',
-            data: [Number("<%= NumberofCopies %>"), Number("<%= NumberofCopiesBorrowed %>"), Number("<%= NumberofCopiesAvailable %>")],
+            data: [Number("{{.LibraryData.NumberofCopies}}"), Number("{{.LibraryData.NumberofCopiesBorrowed}}"), Number("{{.LibraryData.NumberofCopiesAvailable}}")],
             backgroundColor: [
             'rgb(255, 99, 132)',
             'rgb(54, 162, 235)',
@@ -464,8 +466,10 @@
   });
 }
 
-
-var books =  "<%=booklist %>".split(",");
+var books = [];
+{{range .LibraryData.Books}}
+books.push("{{.}}");
+{{end}}
 
 
 autocomplete(document.getElementById("myInput"), books);

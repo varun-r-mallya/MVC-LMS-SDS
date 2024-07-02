@@ -20,7 +20,10 @@ func Server(){
 	http.HandleFunc("/client/api/login", controllers.ClientLogin)
 
 	http.HandleFunc("/admin/dashboard", jsonwebtoken.Middleware("/admin/dashboard", controllers.AdminDashboard))
+	http.HandleFunc("/admin/api/addbooks", jsonwebtoken.Middleware("/admin/api/addbooks", controllers.AddBooks))
+
 	http.HandleFunc("/client/dashboard", jsonwebtoken.Middleware("/client/dashboard", controllers.ClientDashboard))
+	http.HandleFunc("/client/api/requestadmin", jsonwebtoken.Middleware("/client/api/requestadmin", controllers.RequestAdmin))
 
 	neem.Log("Find page at http://localhost:8080/ or http://xeonlib.org")
 	neem.Critial(http.ListenAndServe(":8080", nil), "Error starting server")
