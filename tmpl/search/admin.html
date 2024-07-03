@@ -99,38 +99,38 @@
                 <h2>Book Details</h2>
                 <br>
                 <div>
-                    <h3>Book ID: <text><%=book.B_Id%></text></h3>
-                    <h3>Book Title: <text><%=book.BookName%></text></h3>
-                    <h3>Author: <text><%=book.Author%></text></h3>
-                    <h3>Genre: <text><%=book.Genre%></text></h3>
-                    <h3>Due Time: <text><%=book.NumberofDays%> days</text></h3>
-                    <h3>Number of Available Copies: <text><%=book.NumberofCopiesAvailable%></text></h3>
-                    <h3>Total Number of Copies: <text><%=book.NumberofCopies%></text></h3>
-                    <h3>Number of Copies Borrowed: <text><%=book.NumberofCopiesBorrowed%></text></h3>
+                    <h3>Book ID: <text>{{.Book.B_Id}}</text></h3>
+                    <h3>Book Title: <text>{{.Book.Title}}</text></h3>
+                    <h3>Author: <text>{{.Book.Author}}</text></h3>
+                    <h3>Genre: <text>{{.Book.Genre}}</text></h3>
+                    <h3>Due Time: <text>{{.Book.DueTime}} days</text></h3>
+                    <h3>Number of Available Copies: <text>{{.Book.NumberofCopiesAvailable}}</text></h3>
+                    <h3>Total Number of Copies: <text>{{.Book.NumberofCopies}}</text></h3>
+                    <h3>Number of Copies Borrowed: <text>{{.Book.NumberofCopiesBorrowed}}</text></h3>
                 </div>
             </div>
             <div class="col-md-6">
                 <h2>Update Book Details</h2>
-                <form action="/admin/updatebooks" method="post" id="updatebooks">
+                <form action="/admin/api/updatebooks" method="post" id="updatebooks">
                     <div class="form-group">
                         <label for="title">Title</label>
-                        <input type="text" class="form-control" id="title" placeholder="Enter title" value="<%=book.BookName%>">
+                        <input type="text" class="form-control" id="title" placeholder="Enter title" value="{{.Book.Title}}">
                     </div>
                     <div class="form-group">
                         <label for="genre">Genre</label>
-                        <input type="text" class="form-control" id="genre" placeholder="Enter genre" value="<%=book.Genre%>">
+                        <input type="text" class="form-control" id="genre" placeholder="Enter genre" value="{{.Book.Genre}}">
                     </div>
                     <div class="form-group">
                         <label for="author">Author</label>
-                        <input type="text" class="form-control" id="author" placeholder="Enter author" value="<%=book.Author%>">
+                        <input type="text" class="form-control" id="author" placeholder="Enter author" value="{{.Book.Author}}">
                     </div>
                     <div class="form-group">
-                        <label for="due-time">Due Time (Days)</label>
-                        <input type="number" class="form-control" id="due-time" placeholder="Enter due time in days" value="<%=book.NumberofDays%>">
+                        <label for="duetime">Due Time (Days)</label>
+                        <input type="number" class="form-control" id="duetime" placeholder="Enter due time in days" value="{{.Book.DueTime}}">
                     </div>
                     <div class="form-group">
                         <label for="quantity">Quantity</label>
-                        <input type="number" class="form-control" id="quantity" placeholder="Enter quantity" value="<%=book.NumberofCopies%>">
+                        <input type="number" class="form-control" id="quantity" placeholder="Enter quantity" value="{{.Book.NumberofCopies}}">
                     </div>
                     <br>
                     <div id="message" class="mt-3"></div>
@@ -140,7 +140,7 @@
                 </form>
             </div>
         </div>
-        <div class="overduefines">
+        <!-- <div class="overduefines">
             <h2>Overdue Fines</h2>
             <% if(Fines.length == 0) { %>
                 <p>No Overdue fines</p>
@@ -154,38 +154,38 @@
                     </div>
                 </div>
             <% } %>
-        </div>
+        </div> -->
     <div id="logoutbutton" style="flex-direction: row;">
         <button type="button" class="btn btn-danger" onclick="window.location.href='/admin/dashboard'">Back</button>
     </div>
 </body>
 <script>
-        function HandleFine(T_Id){
-            const requestOptions = {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ T_Id: T_Id })
-            }
-            fetch('/admin/handlefine', requestOptions)
-                .then(response => {
-                    if (response.ok) {
-                        response.json().then(data => {
-                            alert(data.message);
-                        });
-                        window.location.reload();
-                    } else {
-                        response.json().then(error => {
-                            const message = document.getElementById('message');
-                            alert(error.message);
-                        });
-                    }
-                });
-        }
+        // function HandleFine(T_Id){
+        //     const requestOptions = {
+        //         method: 'POST',
+        //         headers: {
+        //             'Content-Type': 'application/json'
+        //         },
+        //         body: JSON.stringify({ T_Id: T_Id })
+        //     }
+        //     fetch('/admin/handlefine', requestOptions)
+        //         .then(response => {
+        //             if (response.ok) {
+        //                 response.json().then(data => {
+        //                     alert(data.message);
+        //                 });
+        //                 window.location.reload();
+        //             } else {
+        //                 response.json().then(error => {
+        //                     const message = document.getElementById('message');
+        //                     alert(error.message);
+        //                 });
+        //             }
+        //         });
+        // }
 
         function deleteBook() {
-            const bookID = '<%=book.B_Id%>';
+            const bookID = '{{.Book.B_Id}}';
             const requestOptions = {
                 method: 'POST',
                 headers: {
@@ -193,7 +193,7 @@
                 },
                 body: JSON.stringify({ bookID: bookID })
             };
-            fetch('/admin/deletebooks', requestOptions)
+            fetch('/admin/api/deletebooks', requestOptions)
                 .then(response => {
                     if (response.ok) {
                         if (response.redirected) {
@@ -213,10 +213,10 @@
             const title = document.getElementById('title').value;
             const genre = document.getElementById('genre').value;
             const author = document.getElementById('author').value;
-            const dueTime = document.getElementById('due-time').value;
+            const dueTime = document.getElementById('duetime').value;
             const quantity = document.getElementById('quantity').value;
             const bookData = {
-                bookID: '<%=book.B_Id%>',
+                bookID: "{{.Book.B_Id}}",
                 title: title,
                 genre: genre,
                 author: author,
@@ -230,7 +230,7 @@
                 },
                 body: JSON.stringify(bookData)
             };
-            const response = await fetch('/admin/updatebooks', requestOptions);
+            const response = await fetch('/admin/api/updatebooks', requestOptions);
             if (response.ok) { 
             if (response.redirected) {
                 window.location.href = response.url;

@@ -26,3 +26,17 @@ func AdminDashboard(w http.ResponseWriter, r *http.Request, data types.PageDataA
 
 	neem.Spotlight(tmpl.Execute(w, data), "could not serve Admin Dashboard")
 }
+
+func AdminViewBook(w http.ResponseWriter, r *http.Request, data types.AdminBookView){
+	tmpl, err := template.ParseFiles("./tmpl/search/admin.html")
+	if err != nil {
+		neem.Spotlight(err, "could not parse Admin View Book template")
+		
+	}
+
+	if data.Book.Title == "" {
+		NoBook(w, r, r.URL.Query().Get("search"))
+		return
+	}
+	neem.Spotlight(tmpl.Execute(w, data), "could not serve Admin View Book")
+}

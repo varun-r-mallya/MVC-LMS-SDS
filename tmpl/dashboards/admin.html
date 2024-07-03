@@ -199,7 +199,7 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">{{.UserName}}</h5>
-                        <p class="card-text">Requesting check-in for {{.Title}}</p>
+                        <p class="card-text">Requesting check-out for {{.Title}}</p>
                         <button class="btn btn-primary" onclick="HandleCheckOut({{.T_Id}}, true)">Approve</button>
                         <button class="btn btn-danger" onclick="HandleCheckOut({{.T_Id}}, false)">Deny</button>
                     </div>
@@ -232,7 +232,7 @@
 </body>
 <script>
         function HandleCheckIn(T_Id, accepted){
-            fetch('/admin/acceptcheckin', {
+            fetch('/admin/api/handlecheckins', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -248,13 +248,13 @@
             });
         }
         function HandleCheckOut(T_Id, accepted){
-            fetch('/admin/acceptcheckout', {
+            fetch('/admin/api/handlecheckouts', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({T_Id: T_Id, accepted: accepted})
-            }).then(function(response) {
+            }).then(async function(response) {
                 if (response.ok) {
                     window.location.href = '/admin/dashboard';
                 }
@@ -264,7 +264,7 @@
             });
         }
         function ApproveAdmin(username, accepted){
-            fetch('/admin/manageadmins', {
+            fetch('/admin/api/manageadmins', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

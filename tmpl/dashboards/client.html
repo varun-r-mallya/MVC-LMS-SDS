@@ -143,28 +143,26 @@
                 <br>
                 <h2> Transaction History</h2>
                 <div id="transactions">
-                    <% for (let i = 0; i < transactions.length; i++) { %>
-                        <a href="/client/viewbook?search=<%=transactions[i].BookName%>">
+                    {{range .Transactions}}
+                        <a href="/client/viewbook?search={{.Title}}">
                             <div class="card" style="background-color: #333; color: #fff; margin-bottom: 10px;">
                                 <div class="card-body">
-                                    <h5 class="card-title" style="color:#03ff0f"><%=transactions[i].BookName%></h5>
-                                    <p class="card-text" style="color:#2fe0ff">Author: <%=transactions[i].Author%></p>
-                                    <% if (transactions[i].CheckOutAccepted === 1) { %>
-                                        
-                                        <p class="card-text" style="color:#a218ff">Borrowed on: <%=transactions[i].DateBorrowed%></p>
-                                    <% } else {%>
+                                    <h5 class="card-title" style="color:#03ff0f">{{.Title}}</h5>
+                                    <p class="card-text" style="color:#2fe0ff">Author: {{.Author}}</p>
+                                    {{ if eq .CheckOutAccepted "{true true}"}}
+                                        <p class="card-text" style="color:#a218ff">Borrowed on: {{.DateBorrowed}}</p>
+                                    {{else}}
                                         <p class="card-text" style="color:#ffffff">Check Out Status: Not accepted</p>
-                                    <% } %>
-                                    <% if (transactions[i].CheckInAccepted === 1) { %>
-                                        <p class="card-text" style="color:#a218ff">Returned on: <%=transactions[i].DateReturned%></p>
-                                    <% } else {%>
+                                    {{end}}
+                                    {{if eq .CheckInAccepted "{true true}"}}
+                                        <p class="card-text" style="color:#a218ff">Returned on: {{.DateReturned}}</p>
+                                    {{else}}
                                         <p class="card-text" style="color:#ffffff">Check In Status: Not accepted</p>
-                                    <% } %>
-                                    <p class="card-text" style="color:#ffffff">Time in days for return: <%=transactions[i].NumberofDays%></p>
+                                    {{end}}
                                 </div>
                             </div>
                         </a>
-                    <% } %>
+                    {{end}}
                 </div>
             </div>
             <div class="col-md-6">
@@ -177,7 +175,7 @@
         </div>
         <br />
         <br />
-        <p style="color: white; font-size: large;">Overdue Fine: &#8377; <%=OverDueFine%></p>
+        <!-- <p style="color: white; font-size: large;">Overdue Fine: &#8377; <%=OverDueFine%></p> -->
         <div class="separator">
             <div class="container2" style="display: flex; flex-direction: column;">
                 <h2>Explore</h2>

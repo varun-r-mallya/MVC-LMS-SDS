@@ -2,13 +2,15 @@ package controllers
 
 import (
 	"encoding/json"
+	"errors"
+	_"fmt"
 	"io"
 	"net/http"
 
 	"github.com/varun-r-mallya/MVC-LMS-SDS/pkg/controllers/jsonwebtoken"
+	"github.com/varun-r-mallya/MVC-LMS-SDS/pkg/controllers/passwords"
 	"github.com/varun-r-mallya/MVC-LMS-SDS/pkg/models"
 	"github.com/varun-r-mallya/MVC-LMS-SDS/pkg/neem"
-	"github.com/varun-r-mallya/MVC-LMS-SDS/pkg/controllers/passwords"
 	"github.com/varun-r-mallya/MVC-LMS-SDS/pkg/types"
 	"github.com/varun-r-mallya/MVC-LMS-SDS/pkg/views"
 )
@@ -95,9 +97,33 @@ func ClientDashboard(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
 	}
+	cookie, err := r.Cookie("token")
+    if err != nil {
+		neem.Spotlight(err, "Error in Cookie decoding")
+        switch {
+        	case errors.Is(err, http.ErrNoCookie):
+        	    http.Redirect(w, r, "/noaccess", http.StatusFound)
+				return
+        	default:
+        	    neem.Spotlight(err, "Cookie error")
+        	    http.Redirect(w, r, "/noaccess", http.StatusFound)
+				return
+        }
+    }
+	user, err2 := jsonwebtoken.ValidateToken(cookie.Value)
+	if err2 != nil {
+		http.Redirect(w, r, "/noaccess", http.StatusFound)
+		return
+	}
+	transactions, err := models.ClientTransactions(user)
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
 	pageDataClient := types.PageDataClient{
 		LibraryData: Librarydata,
 		Books: Books,
+		Transactions: transactions ,
 	}
 	views.ClientDashboard(w, r, pageDataClient)
 }
@@ -115,12 +141,36 @@ func ClientViewBook(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	bookdata, err := models.GetBook(title)
-	data := types.ClientBookView{
-		Book: bookdata,
-	}
 	if err != nil {
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
+	}
+	cookie, err := r.Cookie("token")
+    if err != nil {
+		neem.Spotlight(err, "Error in Cookie decoding")
+        switch {
+        	case errors.Is(err, http.ErrNoCookie):
+        	    http.Redirect(w, r, "/noaccess", http.StatusFound)
+				return
+        	default:
+        	    neem.Spotlight(err, "Cookie error")
+        	    http.Redirect(w, r, "/noaccess", http.StatusFound)
+				return
+        }
+    }
+	user, err2 := jsonwebtoken.ValidateToken(cookie.Value)
+	if err2 != nil {
+		http.Redirect(w, r, "/noaccess", http.StatusFound)
+		return
+	}
+	transactions, err := models.ClientPerBookTransactions(user, bookdata.B_Id)
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+	data := types.ClientBookView{
+		Book: bookdata,
+		Transactions: transactions,
 	}
 	views.ClientViewBook(w, r, data)
 }

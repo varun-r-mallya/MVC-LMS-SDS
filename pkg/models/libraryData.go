@@ -131,12 +131,12 @@ func GetCheckRequests() (types.AdminData, error){
 			neem.DBError("error scanning row", err)
 			return types.AdminData{}, err
 		}
-		CheckOutApproval.B_Id, err = strconv.Atoi(conv1)
+		CheckOutApproval.T_Id, err = strconv.Atoi(conv1)
 		if err != nil {
 			neem.DBError("error converting string to int", err)
 			return types.AdminData{}, err
 		}
-		CheckOutApproval.T_Id, err = strconv.Atoi(conv2)
+		CheckOutApproval.B_Id, err = strconv.Atoi(conv2)
 		if err != nil {
 			neem.DBError("error converting string to int", err)
 			return types.AdminData{}, err
@@ -153,17 +153,17 @@ func GetCheckRequests() (types.AdminData, error){
 	for rows.Next() {
 		CheckInApproval := types.Transactions{}
 		var conv1, conv2 string
-		err := rows.Scan(&CheckInApproval.Title, conv1, &CheckInApproval.UserName, conv2, &CheckInApproval.CheckOutAccepted, &CheckInApproval.CheckOutAccepted, &CheckInApproval.DateBorrowed, &CheckInApproval.DateReturned, &CheckInApproval.OverdueFine)		
+		err := rows.Scan(&CheckInApproval.Title, &conv1, &CheckInApproval.UserName, &conv2, &CheckInApproval.CheckOutAccepted, &CheckInApproval.CheckOutAccepted, &CheckInApproval.DateBorrowed, &CheckInApproval.DateReturned, &CheckInApproval.OverdueFine)		
 		if err != nil {
 			neem.DBError("error scanning row", err)
 			return types.AdminData{}, err
 		}
-		CheckInApproval.B_Id, err = strconv.Atoi(conv1)
+		CheckInApproval.T_Id, err = strconv.Atoi(conv1)
 		if err != nil {
 			neem.DBError("error converting string to int", err)
 			return types.AdminData{}, err
 		}
-		CheckInApproval.T_Id, err = strconv.Atoi(conv2)
+		CheckInApproval.B_Id, err = strconv.Atoi(conv2)
 		if err != nil {
 			neem.DBError("error converting string to int", err)
 			return types.AdminData{}, err
@@ -194,4 +194,83 @@ func GetBook(title string) (types.Book, error) {
 		}
 	}
 	return book, nil
+}
+
+func ClientTransactions(user types.CookieUser) ([]types.ClientBookViewTransactionsInterpretable, error) {
+	neem.Log("Client Transactions")
+	db, err := Connection()
+	if err != nil {
+		neem.Critial(err, "error connecting to the database")
+		return []types.ClientBookViewTransactionsInterpretable{}, err
+	}
+	rows, err := db.Query(`SELECT booklist.Title, booklist.Author, transactions.* FROM transactions INNER JOIN booklist ON transactions.B_Id = booklist.B_Id WHERE transactions.username = (?);`, user.UserName)
+	if err != nil {
+		neem.DBError("error executing query", err)
+		return []types.ClientBookViewTransactionsInterpretable{}, err
+	}
+	defer rows.Close()
+	var transactions []types.ClientBookViewTransactionsInterpretable
+	for rows.Next() {
+		var transaction types.ClientBookViewTransactions
+		var conv1, conv2 string
+		err := rows.Scan(&transaction.Title, &transaction.Author, &conv2, &transaction.UserName, &conv1, &transaction.CheckOutAccepted, &transaction.CheckInAccepted, &transaction.DateBorrowed, &transaction.DateReturned, &transaction.OverdueFine)
+		if err != nil {
+			neem.DBError("error scanning row", err)
+			return []types.ClientBookViewTransactionsInterpretable{}, err
+		}
+		var stringDateBorrowed string = string([]byte(transaction.DateBorrowed))
+		var stringDateReturned string = string([]byte(transaction.DateReturned))
+		transactionInterpretable := types.ClientBookViewTransactionsInterpretable{
+			Title: transaction.Title,
+			UserName: transaction.UserName,
+			CheckInAccepted: fmt.Sprintf("%v", transaction.CheckInAccepted),
+			CheckOutAccepted: fmt.Sprintf("%v", transaction.CheckOutAccepted),
+			DateBorrowed: fmt.Sprintf("%v", stringDateBorrowed),
+			DateReturned: fmt.Sprintf("%v", stringDateReturned),
+			DueTime: fmt.Sprintf("%v", transaction.DueTime),
+			OverdueFine: fmt.Sprintf("%v", transaction.OverdueFine),
+			Author: transaction.Author,
+		}
+		transactions = append(transactions, transactionInterpretable)
+	}
+	return transactions, nil
+}
+
+func ClientPerBookTransactions(user types.CookieUser, bookId int) ([]types.ClientBookViewTransactionsInterpretable, error) {
+	db, err := Connection()
+	if err != nil {
+		neem.Critial(err, "error connecting to the database")
+		return []types.ClientBookViewTransactionsInterpretable{}, err
+	}
+	rows, err := db.Query(`SELECT booklist.Title, booklist.Author, transactions.* FROM transactions INNER JOIN booklist ON transactions.B_Id = booklist.B_Id WHERE transactions.username = (?) AND booklist.B_Id = (?);`, user.UserName, bookId)
+	if err != nil {
+		neem.DBError("error executing query", err)
+		return []types.ClientBookViewTransactionsInterpretable{}, err
+	}
+	defer rows.Close()
+	var transactions []types.ClientBookViewTransactionsInterpretable
+	for rows.Next() {
+		var transaction types.ClientBookViewTransactions
+		var conv1, conv2 string
+		err := rows.Scan(&transaction.Title, &transaction.Author, &conv2, &transaction.UserName, &conv1, &transaction.CheckOutAccepted, &transaction.CheckInAccepted, &transaction.DateBorrowed, &transaction.DateReturned, &transaction.OverdueFine)
+		if err != nil {
+			neem.DBError("error scanning row", err)
+			return []types.ClientBookViewTransactionsInterpretable{}, err
+		}
+		var stringDateBorrowed string = string([]byte(transaction.DateBorrowed))
+		var stringDateReturned string = string([]byte(transaction.DateReturned))
+		transactionInterpretable := types.ClientBookViewTransactionsInterpretable{
+			Title: transaction.Title,
+			UserName: transaction.UserName,
+			CheckInAccepted: fmt.Sprintf("%v", transaction.CheckInAccepted),
+			CheckOutAccepted: fmt.Sprintf("%v", transaction.CheckOutAccepted),
+			DateBorrowed: fmt.Sprintf("%v", stringDateBorrowed),
+			DateReturned: fmt.Sprintf("%v", stringDateReturned),
+			DueTime: fmt.Sprintf("%v", transaction.DueTime),
+			OverdueFine: fmt.Sprintf("%v", transaction.OverdueFine),
+			Author: transaction.Author,
+		}
+		transactions = append(transactions, transactionInterpretable)
+	}
+	return transactions, nil
 }

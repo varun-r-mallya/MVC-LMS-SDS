@@ -21,10 +21,17 @@ func Server(){
 
 	http.HandleFunc("/admin/dashboard", jsonwebtoken.Middleware("/admin/dashboard", controllers.AdminDashboard))
 	http.HandleFunc("/admin/api/addbooks", jsonwebtoken.Middleware("/admin/api/addbooks", controllers.AddBooks))
+	http.HandleFunc("/admin/viewbook", jsonwebtoken.Middleware("/admin/viewbook", controllers.AdminViewBook))
+	http.HandleFunc("/admin/api/updatebooks", jsonwebtoken.Middleware("/admin/api/updatebooks", controllers.UpdateBooks))
+	http.HandleFunc("/admin/api/deletebooks", jsonwebtoken.Middleware("/admin/api/deletebooks", controllers.DeleteBooks))
+	http.HandleFunc("/admin/api/handlecheckouts", jsonwebtoken.Middleware("/admin/api/handlecheckouts", controllers.AcceptCheckOut))
+	http.HandleFunc("/admin/api/handlecheckins", jsonwebtoken.Middleware("/admin/api/handlecheckins", controllers.AcceptCheckIn))
+	http.HandleFunc("/admin/api/manageadmins", jsonwebtoken.Middleware("/admin/api/manageadmins", controllers.AcceptAdmins))
 
 	http.HandleFunc("/client/dashboard", jsonwebtoken.Middleware("/client/dashboard", controllers.ClientDashboard))
 	http.HandleFunc("/client/viewbook", jsonwebtoken.Middleware("/client/viewbook", controllers.ClientViewBook))
-
+	http.HandleFunc("/client/api/checkout", jsonwebtoken.Middleware("/client/api/checkout", controllers.HandleCheckOut))
+	http.HandleFunc("/client/api/checkin", jsonwebtoken.Middleware("/client/api/checkin", controllers.HandleCheckIn))
 	http.HandleFunc("/client/api/requestadmin", jsonwebtoken.Middleware("/client/api/requestadmin", controllers.RequestAdmin))
 
 	neem.Log("Find page at http://localhost:8080/ or http://xeonlib.org")

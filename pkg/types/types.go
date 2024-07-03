@@ -37,6 +37,7 @@ type BookTemp struct {
 	Genre string `json:"genre"`
 	DueTime string `json:"duetime"`
 	Quantity string `json:"quantity"`
+	B_Id string `json:"bookID"`
 }
 
 type Book struct {
@@ -76,8 +77,10 @@ type PageDataAdmin struct {
 type PageDataClient struct {
     LibraryData  LibraryData
 	Books []Book
+	Transactions []ClientBookViewTransactionsInterpretable
 }
 
+//made changes to nullint16
 type Transactions struct {
 	Title string `json:"title"`
 	T_Id int `json:"t_id"`
@@ -85,14 +88,56 @@ type Transactions struct {
 	UserName string `json:"username"`
 	CheckInAccepted sql.NullBool `json:"checkinaccepted"`
 	CheckOutAccepted sql.NullBool `json:"checkoutaccepted"`
-	DateBorrowed sql.NullTime `json:"dateborrowed"`
-	DateReturned sql.NullTime `json:"datereturned"`
+	DateBorrowed []uint8 `json:"dateborrowed"`
+	DateReturned []uint8 `json:"datereturned"`
 	DueTime int `json:"duetime"`
 	OverdueFine int `json:"overduefine"`
 }
 
+type ClientBookViewTransactions struct {
+	Title string `json:"title"`
+	UserName string `json:"username"`
+	CheckInAccepted sql.NullBool `json:"checkinaccepted"`
+	CheckOutAccepted sql.NullBool `json:"checkoutaccepted"`
+	DateBorrowed []uint8 `json:"dateborrowed"`
+	DateReturned []uint8 `json:"datereturned"`
+	DueTime int `json:"duetime"`
+	OverdueFine int `json:"overduefine"`
+	Author string `json:"author"`
+}
 
+type ClientBookViewTransactionsInterpretable struct {
+	Title string `json:"title"`
+	UserName string `json:"username"`
+	CheckInAccepted string `json:"checkinaccepted"`
+	CheckOutAccepted string `json:"checkoutaccepted"`
+	DateBorrowed string `json:"dateborrowed"`
+	DateReturned string `json:"datereturned"`
+	DueTime string `json:"duetime"`
+	OverdueFine string `json:"overduefine"`
+	Author string `json:"author"`
+}
 type ClientBookView struct {
 	Book Book	`json:"book"`
-	Transactions Transactions `json:"transactions"`
+	Transactions []ClientBookViewTransactionsInterpretable `json:"transactions"`
+}
+
+type AdminBookView struct {
+	Book Book	`json:"book"`
+	Transactions []ClientBookViewTransactionsInterpretable `json:"transactions"`
+}
+
+type CheckOut struct {
+	T_Id int `json:"t_id"`
+	Accepted bool `json:"accepted"`
+}
+
+type CheckIn struct {
+	T_Id int `json:"t_id"`
+	Accepted bool `json:"accepted"`
+}
+
+type AcceptAdmins struct {
+	UserName string `json:"username"`
+	Accepted bool `json:"accepted"`
 }
