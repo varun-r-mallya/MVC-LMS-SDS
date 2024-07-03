@@ -28,3 +28,8 @@ curl -sSfL https://raw.githubusercontent.com/cosmtrek/air/master/install.sh | sh
 - run `make dev` to start in development mode
 - run `make build` to get a binary in `./target/` directory
 - in `.env`, use mode `dev` to get Logs, use mode `prod` to get only system critical/spotlit logs
+
+## Docker Specific instructions
+
+- `docker build -t xeonlib1 .`
+- `docker run -p 8080:8080 xeonlib1`

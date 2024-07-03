@@ -3,7 +3,7 @@
 GO := go
 GOPATH := $(shell go env GOPATH)
 GOPATH_BIN := $(GOPATH)/bin
-BUILD_OUTPUT := ./build/MVC-LMS-SDS
+BUILD_OUTPUT := ./MVC-LMS-SDS
 GO_PACKAGES := $(shell go list ./... | grep -v vendor)
 BUILD_INPUT := cmd/main.go
 UNAME := $(shell uname)
@@ -19,7 +19,6 @@ help:
 
 build:
 		@echo "Building..."
-		@test -d build || mkdir build
 		@$(GO) build -o $(BUILD_OUTPUT) $(BUILD_INPUT)
 		@echo "Built as $(BUILD_OUTPUT)"
 
@@ -46,11 +45,11 @@ migration_create:
 
 migration_up:
 		@read -p "Enter version: " v; \
-		migrate -path database/migration/ -database "mysql://LMSxeon:password@tcp(localhost:3306)/LMS?" -verbose up	$$v
+		migrate -path database/migration/ -database "mysql://root:password@tcp(localhost:3306)/LMS?" -verbose up	$$v
 migration_down:
 		@read -p "Enter version: " v; \
-		migrate -path database/migration/ -database "mysql://LMSxeon:password@tcp(localhost:3306)/LMS?" -verbose down $$v
+		migrate -path database/migration/ -database "mysql://root:password@tcp(localhost:3306)/LMS?" -verbose down $$v
 migration_fix:
 		@read -p "Enter version: " v; \
-		migrate -path database/migration/ -database "mysql://LMSxeon:password@tcp(localhost:3306)/LMS?" force $$v
+		migrate -path database/migration/ -database "mysql://root:password@tcp(localhost:3306)/LMS?" force $$v
 
