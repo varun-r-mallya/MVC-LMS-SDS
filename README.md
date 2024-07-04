@@ -2,6 +2,29 @@
 ## written in Go using the MVC architecture
 
 ## To run
+### Using Docker compose
+- Have Docker and Docker Compose installed on your device along with Apache
+- Also make `.env` from `.env.example`
+- run `docker-compose up --build` to start the server
+- Wait for exactly 2 minutes for the server to initialise
+- run the following to set up virtual hosting using Apache (Replace httpd with the name of your Apache service)
+	```bash
+		systemctl start httpd
+		systemctl enable httpd
+		cp ./.conf/srv.index.html /srv/http/index.html
+		mkdir /etc/httpd/conf/vhosts
+		cp ./.conf/xeonlib.org.conf /etc/httpd/conf/vhosts/xeonlib.org
+		mkdir /srv/xeonlib.org
+		cp ./.conf/srv.index.html /srv/xeonlib.org/index.html
+		chown -R root:http /srv/xeonlib.org
+		rm /etc/httpd/conf/httpd.conf
+		cp ./.conf/httpd.conf /etc/httpd/conf/httpd.conf
+		echo "127.0.0.1     xeonlib.org" >> /etc/hosts
+		systemctl restart httpd
+	```
+- run `docker-compose down` to stop the server
+
+## To run without Docker
 - Set up MariaDB on your device (only Arch based systems will work, else you will have to replicate the startup script for your OS)
 - run `./init.sh` as root (ONLY FOR ARCH)
 - If not Arch, then configure virtual proxy according to your distro and map it to port 8080 with a domain name of your choice.

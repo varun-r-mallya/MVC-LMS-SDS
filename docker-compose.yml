@@ -1,13 +1,18 @@
 services:
   db:
     image: mysql:5.7
+    restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: LMS
-    ports:
-      - "3307:3306"
+      MYSQL_DATABASE: 'LMS'
+      MYSQL_USER: 'user'
+      MYSQL_PASSWORD: 'password'
+      MYSQL_ROOT_PASSWORD: 'password'
+    expose:
+      - '3306'
     volumes:
-      - db-data:/var/lib/mysql
+      - my-db:/var/lib/mysql
+      - ./init.sql:/database/docker-entrypoint-initdb.d/init.sql
+
 
   app:
     build:
@@ -17,15 +22,10 @@ services:
       - "8080:8080"
     depends_on:
       - db
-    environment:
-      DB_HOST: db
-      DB_USER: root
-      DB_PASSWORD: password
-      DB_NAME: LMS
-
+    
 volumes:
-  db-data:
-
+  my-db:
+  
 configs:
   httpd-config:
     external: true

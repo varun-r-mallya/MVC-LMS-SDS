@@ -1,0 +1,5 @@
+vendor/
+.env.example
+.ignore.selfreference.md
+init.sh
+.air.toml

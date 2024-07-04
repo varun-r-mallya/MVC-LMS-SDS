@@ -3,7 +3,7 @@
 GO := go
 GOPATH := $(shell go env GOPATH)
 GOPATH_BIN := $(GOPATH)/bin
-BUILD_OUTPUT := ./MVC-LMS-SDS
+BUILD_OUTPUT := ./build/MVC-LMS-SDS
 GO_PACKAGES := $(shell go list ./... | grep -v vendor)
 BUILD_INPUT := cmd/main.go
 UNAME := $(shell uname)
@@ -19,6 +19,7 @@ help:
 
 build:
 		@echo "Building..."
+		@test -d build || mkdir build
 		@$(GO) build -o $(BUILD_OUTPUT) $(BUILD_INPUT)
 		@echo "Built as $(BUILD_OUTPUT)"
 
