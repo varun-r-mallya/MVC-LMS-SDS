@@ -85,7 +85,7 @@ func RequestCheckIn(user types.CookieUser, bookId int) (string, error) {
 		return "", err
 	}
 	query := `SELECT COUNT(*) FROM transactions WHERE username = (?) AND B_Id = (?) AND CheckOutAccepted = 1 AND CheckInAccepted IS NULL OR CheckInAccepted != 1;`;
-    query2 := `UPDATE transactions SET CheckInAccepted = 0 WHERE T_Id = (SELECT MAX(T_Id) FROM transactions WHERE username = (?) AND B_Id = (?));`;
+    query2 := `UPDATE transactions SET CheckInAccepted = 0 WHERE T_Id IN (SELECT T_Id FROM (SELECT MAX(T_Id) AS T_Id FROM transactions WHERE username = ? AND B_Id = ?) AS subquery);`;
 	
 	var count int
 	err = db.QueryRow(query, user.UserName, bookId).Scan(&count)

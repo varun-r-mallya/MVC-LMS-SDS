@@ -56,6 +56,17 @@ func DeleteBooks(bookID int) (bool, error){
 		neem.Critial(err, "error connecting to the database")
 		return false, err
 	}
+	check0Sql := "SELECT NumberofCopiesBorrowed FROM booklist WHERE B_Id = ?";
+	var numberofcopiesborrowed int
+	err = db.QueryRow(check0Sql, bookID).Scan(&numberofcopiesborrowed)
+	if err != nil {
+		neem.DBError("error checking the database", err)
+		return false, fmt.Errorf("error in database")
+	}
+	if numberofcopiesborrowed > 0 {
+		neem.Log("Book has been borrowed")
+		return false, fmt.Errorf("book has been borrowed")
+	}
 	checkSql := "DELETE FROM transactions WHERE B_Id = ?";
 	_, err = db.Exec(checkSql, bookID)
 	if err != nil {
