@@ -7,9 +7,9 @@ tmp_dir = "tmp"
   # post_cmd = ["sudo systemctl restart httpd"]
   bin = "tmp/LMS"
   full_bin = "APP_ENV=dev APP_USER=air ./tmp/LMS"
-  include_ext = ["go", "tpl", "tmpl", "html", "css", "js", "env", "yaml", "views"]
+  include_ext = ["go", "tpl", "tmpl", "html", "css", "js", "env", "yaml", "views", "js", "css"]
   exclude_dir = ["tmp", "assets", "vendor", "bin", "build", "deploy"]
-  include_dir = []
+  include_dir = ["js", "css"]
   exclude_regex = ["_test.go"]
   exclude_file = []
   exclude_unchanged = true

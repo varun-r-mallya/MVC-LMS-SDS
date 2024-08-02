@@ -3,77 +3,7 @@
 <head>
     <title>View Book</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <style>
-        body {
-            background-color: #000;
-            color: #03ff0f;
-            font-family: 'Courier New', monospace;
-        }
-        .container {
-            margin-top: 20px;
-        }
-        .form-control {
-            background-color: #000000;
-            color: #ffffff;
-            
-            border: 1px solid #fff;
-        }
-        .form-control::placeholder {
-            color: #a3a3a3;
-        }
-        .form-control:focus {
-            background-color: #000000;
-            color: white;
-        }
-        .btn-primary {
-            background-color: #007bff;
-            border-color: #007bff;
-        }
-        .btn-primary:hover {
-            background-color: #0069d9;
-            border-color: #0062cc;
-        }
-        #stars {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -100;
-        }
-        .star {
-            position: absolute;
-            background-color: #dcfd8e;
-            border-radius: 50%;
-            animation: twinkle linear infinite;
-        }
-        @keyframes twinkle {
-            0% { opacity: 0; transform: translateY(0); }
-            100% { opacity: 1; transform: translateY(-100vh); animation-duration: 0.5s; }
-        }
-        .separator {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        h3{
-            color: #fdfdfd;
-        }
-        text{
-            color: #b9ddbb;
-        }
-        #logoutbutton {
-            position: fixed;
-            bottom: 2%;
-            left: 2%;
-            z-index: 9999;
-        }
-        .pasttransactions {
-            overflow-y: scroll;
-            height: 40vh;
-        }
-
-    </style>
+    <link rel="stylesheet" href="/css/client_search.css">
 </head>
 <body>
     <div id="stars"></div>
@@ -138,58 +68,9 @@
         <button type="button" class="btn btn-danger" onclick="window.location.href='/client/dashboard'">Back</button>
     </div>
 </body>
-<script>
-    const message = document.getElementById('message');
-
-    function CheckOut() {
-        const bookID = '{{.Book.B_Id}}';
-        const RequestOptions = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ bookID })
-        };
-        fetch('/client/api/checkout', RequestOptions)
-            .then(async response => {
-                if (response.ok) {
-                    const res = await response.json().then(data => data.message)
-                    console.log(res);
-                    alert(res);
-                    window.location.reload();
-                } else {
-                    await response.json().then(error => {
-                        message.innerText = error.message;
-                    });
-                }
-            
-            })
-    }
-
-    function CheckIn() {
-        const bookID = '{{.Book.B_Id}}';
-        const RequestOptions = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ bookID })
-        };
-        fetch('/client/api/checkin', RequestOptions)
-            .then(async response => {
-                if (response.ok) {
-                    const res = await response.json().then(data => data.message)
-                    console.log(res);
-                    alert(res);
-                    window.location.reload();
-                } else {
-                    await response.json().then(error => {
-                        message.innerText = error.message;
-                    });
-                }
-            
-            })
-    }
-    
+<script>    
+    var BookID = '{{.Book.B_Id}}'
+</script>
+<script src="/js/client_search.js">
 </script>
 </html>

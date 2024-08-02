@@ -166,19 +166,7 @@ function autocomplete(inp, arr) {
   document.addEventListener("click", function (e) {
     closeAllLists(e.target);
   });
-}
 
-var books = [];
-{
-  {
-    range.LibraryData.Books;
-  }
+  
 }
-books.push("{{.}}");
-{
-  {
-    end;
-  }
-}
-
-autocomplete(document.getElementById("myInput"), books);
+autocomplete(document.getElementById("myInput"), window.books);

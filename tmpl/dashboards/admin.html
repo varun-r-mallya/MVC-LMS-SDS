@@ -111,7 +111,6 @@
     </div>
     </div>
     <a class="btn btn-primary logout-button" id="logoutbutton">Logout</a>
-    <script src="/js/admin_dashboard.js"></script>
     <script>
         const ctx = document.getElementById('myChart');
         const data = {
@@ -141,7 +140,11 @@
                 cutout: '50%',
             }
         });
-
+        var books = [];
+        {{range.LibraryData.Books}}
+            books.push("{{.}}")
+        {{end}}
     </script>
+    <script src="/js/admin_dashboard.js"></script>
 </body>
 </html>
