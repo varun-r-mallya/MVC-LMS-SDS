@@ -55,8 +55,8 @@ func RequestAdmin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	message := types.Message{Message: "Request sent to become admin"}
-	b, err := json.Marshal(message)
-	if err != nil {
+	b, err2 := json.Marshal(message)
+	if err2 != nil {
 		neem.Spotlight(err, "could not marshal message")
 	}
 	w.Write(b)
@@ -87,8 +87,8 @@ func HandleCheckOut(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	body, err := io.ReadAll(r.Body)
-	if err != nil {
+	body, err3 := io.ReadAll(r.Body)
+	if err3 != nil {
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
 	}
@@ -96,13 +96,13 @@ func HandleCheckOut(w http.ResponseWriter, r *http.Request) {
 		BookID string `json:"BookID"`
 	}{}
 	json.Unmarshal(body, &strbookID)
-	bookID, err := strconv.Atoi(strbookID.BookID)
-	if err != nil {
+	bookID, err4 := strconv.Atoi(strbookID.BookID)
+	if err4 != nil {
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
 	}
-	message, err := models.RequestCheckOut(user, bookID)
-	if err != nil {
+	message, err5 := models.RequestCheckOut(user, bookID)
+	if err5 != nil {
 		toSend := types.Message{Message: message}
 		b, err := json.Marshal(toSend)
 		if err != nil {
@@ -112,8 +112,8 @@ func HandleCheckOut(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	toSend := types.Message{Message: message}
-	b, err := json.Marshal(toSend)
-	if err != nil {
+	b, err6 := json.Marshal(toSend)
+	if err6 != nil {
 		neem.Spotlight(err, "could not marshal message")
 	}
 	w.Write(b)
@@ -144,8 +144,8 @@ func HandleCheckIn(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	body, err := io.ReadAll(r.Body)
-	if err != nil {
+	body, err3 := io.ReadAll(r.Body)
+	if err3 != nil {
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
 	}
@@ -153,13 +153,13 @@ func HandleCheckIn(w http.ResponseWriter, r *http.Request) {
 		BookID string `json:"BookID"`
 	}{}
 	json.Unmarshal(body, &strbookID)
-	bookID, err := strconv.Atoi(strbookID.BookID)
-	if err != nil {
+	bookID, err4 := strconv.Atoi(strbookID.BookID)
+	if err4 != nil {
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
 	}
-	message, err := models.RequestCheckIn(user, bookID)
-	if err != nil {
+	message, err5 := models.RequestCheckIn(user, bookID)
+	if err5 != nil {
 		toSend := types.Message{Message: message}
 		b, err := json.Marshal(toSend)
 		if err != nil {
@@ -169,8 +169,8 @@ func HandleCheckIn(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	toSend := types.Message{Message: message}
-	b, err := json.Marshal(toSend)
-	if err != nil {
+	b, err6 := json.Marshal(toSend)
+	if err6 != nil {
 		neem.Spotlight(err, "could not marshal message")
 	}
 	w.Write(b)
