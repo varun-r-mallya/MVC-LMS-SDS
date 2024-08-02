@@ -13,7 +13,6 @@ services:
       - my-db:/var/lib/mysql
       - ./init.sql:/database/docker-entrypoint-initdb.d/init.sql
 
-
   app:
     build:
       context: .
@@ -22,10 +21,11 @@ services:
       - "8080:8080"
     depends_on:
       - db
-    
+
 volumes:
   my-db:
-  
+
+
 configs:
   httpd-config:
     external: true

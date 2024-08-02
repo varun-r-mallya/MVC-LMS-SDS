@@ -1,119 +1,124 @@
 body {
-    background-color: #000;
-    color: #03ff0f;
-    font-family: 'Courier New', monospace;
+  background-color: #000;
+  color: #03ff0f;
+  font-family: "Courier New", monospace;
+  margin: 0; 
 }
+
 .container {
-    margin-top: 20px;
+  margin-top: 1.5rem; 
 }
+
 .form-control {
-    background-color: #000000;
-    color: #ffffff;
-    
-    border: 1px solid #fff;
+  background-color: #000000;
+  color: #ffffff;
+  border: 0.1rem solid #fff; 
 }
+
 .form-control::placeholder {
-    color: #a3a3a3;
+  color: #a3a3a3;
 }
+
 .form-control:focus {
-    background-color: #000000;
-    color: white;
+  background-color: #000000;
+  color: white;
 }
+
 .btn-primary {
-    background-color: #007bff;
-    border-color: #007bff;
+  background-color: #007bff;
+  border-color: #007bff;
 }
+
 .btn-primary:hover {
-    background-color: #0069d9;
-    border-color: #0062cc;
+  background-color: #0069d9;
+  border-color: #0062cc;
 }
+
 .chart {
-    height: 40vh;
-    background-color: #333;
-    color: #fff;
-    padding: 5%;
+  height: 40vh;
+  background-color: #333;
+  color: #fff;
+  padding: 5%; 
 }
+
 .separator {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 5%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem; 
 }
+
 #buttoncontainer {
-    position: fixed;
-    bottom: 2%;
-    right: 2%;
-    z-index: 9999;
-    display: flex;
-    gap: 5%;
+  position: fixed;
+  bottom: 2%;
+  right: 2%;
+  z-index: 9999;
+  display: flex;
+  gap: 1rem; 
 }
-#transactions{
-    overflow: scroll;
-    overflow-x: hidden;
-    width: 100%;
-    height: 40vh;
-    background-color: #333;
-    color: #fff;
-    padding: 5%;
 
-
+#transactions {
+  overflow: scroll;
+  overflow-x: hidden;
+  width: 100%;
+  height: 40vh;
+  background-color: #333;
+  color: #fff;
+  padding: 5%; 
 }
 
 .card-body {
-    background-color: #252525;
-    color: #fff;
-    border-radius: 1%;
-}
-.card-title{
-    text-decoration: none;
-}
-.card-text{
-    text-decoration: none;
-}
-.explore {
-    display: flex; 
-    flex-wrap: wrap;
-    gap: 1%;
+  background-color: #252525;
+  color: #fff;
+  border-radius: 0.1rem; 
 }
 
-/* delete if it does not work */
+.card-title,
+.card-text {
+  text-decoration: none;
+}
+
+.explore {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem; 
+}
+
 .autocomplete {
-    position: relative;
-    display: inline-block;
+  position: relative;
+  display: inline-block;
 }
 
 #myInput {
-    border: 1px solid transparent;
-    background-color: #252525;
-    padding: 1%;
-    font-size: 1.2rem;
+  border: 0.1rem solid transparent; 
+  background-color: #252525;
+  padding: 0.5rem; 
+  font-size: 1.2rem;
 }
+
 .autocomplete-items {
-    position: absolute;
-    border: 1px solid #d4d4d4;
-    border-bottom: none;
-    border-top: none;
-    z-index: 99;
-    /*position the autocomplete items to be the same width as the container:*/
-    top: 100%;
-    left: 0;
-    right: 0;
-    }
+  position: absolute;
+  border: 0.1rem solid #d4d4d4; 
+  border-bottom: none;
+  border-top: none;
+  z-index: 99;
+  top: 100%;
+  left: 0;
+  right: 0;
+}
 
-    .autocomplete-items div {
-    padding: 10px;
-    cursor: pointer;
-    background-color: #292929; 
-    border-bottom: 1px solid #d4d4d4; 
-    }
+.autocomplete-items div {
+  padding: 0.5rem; 
+  cursor: pointer;
+  background-color: #292929;
+  border-bottom: 0.1rem solid #d4d4d4; 
+}
 
-    /*when hovering an item:*/
-    .autocomplete-items div:hover {
-    background-color: #2e2e2e; 
-    }
+.autocomplete-items div:hover {
+  background-color: #2e2e2e;
+}
 
-    /*when navigating through the items using the arrow keys:*/
-    .autocomplete-active {
-    background-color: DodgerBlue !important; 
-    color: #fcfcfc; 
-    }
+.autocomplete-active {
+  background-color: DodgerBlue !important;
+  color: #fcfcfc;
+}

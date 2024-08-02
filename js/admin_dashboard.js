@@ -166,7 +166,5 @@ function autocomplete(inp, arr) {
   document.addEventListener("click", function (e) {
     closeAllLists(e.target);
   });
-
-  
 }
 autocomplete(document.getElementById("myInput"), window.books);

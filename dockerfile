@@ -1,6 +1,6 @@
 FROM ubuntu:latest
 RUN apt-get update && \
-apt-get install -y curl golang gcc make mysql-client
+    apt-get install -y curl golang gcc make mysql-client
 
 RUN curl -L https://github.com/golang-migrate/migrate/releases/download/v4.15.0/migrate.linux-amd64.tar.gz | tar xvz
 RUN mv migrate /usr/local/bin/migrate

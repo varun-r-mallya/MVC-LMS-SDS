@@ -1,117 +1,115 @@
 body {
-    background-color: #000;
-    color: #03ff0f;
-    font-family: 'Courier New', monospace;
+  background-color: #000;
+  color: #03ff0f;
+  font-family: "Courier New", monospace;
 }
 .container {
-    margin-top: 20px;
+  margin-top: 2%;
 }
 .form-control {
-    background-color: #000000;
-    color: #ffffff;
-    
-    border: 1px solid #fff;
+  background-color: #000000;
+  color: #ffffff;
+
+  border: 0.1% solid #fff;
 }
 .form-control::placeholder {
-    color: #a3a3a3;
+  color: #a3a3a3;
 }
 .form-control:focus {
-    background-color: #000000;
-    color: white;
+  background-color: #000000;
+  color: white;
 }
 .btn-primary {
-    background-color: #007bff;
-    border-color: #007bff;
+  background-color: #007bff;
+  border-color: #007bff;
 }
 .btn-primary:hover {
-    background-color: #0069d9;
-    border-color: #0062cc;
+  background-color: #0069d9;
+  border-color: #0062cc;
 }
 .chart {
-    height: 90%;
-    background-color: #333;
-    color: #fff;
-    padding: 5%;
+  height: 90%;
+  background-color: #333;
+  color: #fff;
+  padding: 5%;
 }
 .approval-section {
-    margin-top: 20px;
+  margin-top: 2%;
 }
 .approval-section .card {
-    background-color: #333;
-    color: #fff;
-    margin-bottom: 10px;
+  background-color: #333;
+  color: #fff;
+  margin-bottom: 1%;
 }
 #stars {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -100;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -100;
 }
 .star {
-    position: absolute;
-    background-color: #dcfd8e;
-    border-radius: 50%;
-    animation: twinkle linear infinite;
+  position: absolute;
+  background-color: #dcfd8e;
+  border-radius: 50%;
+  animation: twinkle linear infinite;
 }
 @keyframes twinkle {
-    0% { opacity: 0; transform: translateY(0); }
-    100% { opacity: 1; transform: translateY(-100vh); animation-duration: 0.5s; }
+  0% {
+    opacity: 0;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(-100vh);
+    animation-duration: 0.5s;
+  }
 }
 .separator {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 #logoutbutton {
-    position: fixed;
-    bottom: 2%;
-    right: 2%;
-    z-index: 9999;
+  position: fixed;
+  bottom: 2%;
+  right: 2%;
+  z-index: 9999;
 }
-
-
-
-
-/* delete if it does not work */
 .autocomplete {
-    position: relative;
-    display: inline-block;
+  position: relative;
+  display: inline-block;
 }
 
 #myInput {
-    border: 1px solid transparent;
-    background-color: #252525;
-    padding: 1%;
-    font-size: 1.2rem;
+  border: 0.1% solid transparent;
+  background-color: #252525;
+  padding: 1%;
+  font-size: 1.2rem;
 }
 .autocomplete-items {
-    position: absolute;
-    border: 1px solid #d4d4d4;
-    border-bottom: none;
-    border-top: none;
-    z-index: 99;
-    /*position the autocomplete items to be the same width as the container:*/
-    top: 100%;
-    left: 0;
-    right: 0;
-    }
+  position: absolute;
+  border: 0.1% solid #d4d4d4;
+  border-bottom: none;
+  border-top: none;
+  z-index: 99;
+  top: 100%;
+  left: 0;
+  right: 0;
+}
 
-    .autocomplete-items div {
-    padding: 10px;
-    cursor: pointer;
-    background-color: #292929; 
-    border-bottom: 1px solid #d4d4d4; 
-    }
+.autocomplete-items div {
+  padding: 1%;
+  cursor: pointer;
+  background-color: #292929;
+  border-bottom: 0.1% solid #d4d4d4;
+}
 
-    /*when hovering an item:*/
-    .autocomplete-items div:hover {
-    background-color: #2e2e2e; 
-    }
-
-    /*when navigating through the items using the arrow keys:*/
-    .autocomplete-active {
-    background-color: DodgerBlue !important; 
-    color: #fcfcfc; 
-    }
+.autocomplete-items div:hover {
+  background-color: #2e2e2e;
+}
+.autocomplete-active {
+  background-color: DodgerBlue !important;
+  color: #fcfcfc;
+}
