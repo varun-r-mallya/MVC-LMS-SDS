@@ -1,8 +1,8 @@
 package views
 
 import (
-	"net/http"
 	"html/template"
+	"net/http"
 
 	"github.com/varun-r-mallya/MVC-LMS-SDS/pkg/neem"
 )

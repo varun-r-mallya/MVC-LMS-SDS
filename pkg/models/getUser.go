@@ -7,7 +7,7 @@ import (
 	"github.com/varun-r-mallya/MVC-LMS-SDS/pkg/neem"
 	"github.com/varun-r-mallya/MVC-LMS-SDS/pkg/types"
 
-	_"github.com/go-sql-driver/mysql"
+	_ "github.com/go-sql-driver/mysql"
 )
 
 func GetUser(UserName string) (types.User, error) {
@@ -27,8 +27,8 @@ func GetUser(UserName string) (types.User, error) {
 			neem.DBError("error getting from database", err)
 			return types.User{}, fmt.Errorf("error in database")
 		}
-	} 
-		
+	}
+
 	return user, nil
 
 }

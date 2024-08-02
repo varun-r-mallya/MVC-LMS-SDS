@@ -3,11 +3,10 @@ package main
 import (
 	// "fmt"
 
-	"github.com/varun-r-mallya/MVC-LMS-SDS/pkg/neem"
 	"github.com/varun-r-mallya/MVC-LMS-SDS/pkg/api"
+	"github.com/varun-r-mallya/MVC-LMS-SDS/pkg/neem"
 
 	"github.com/joho/godotenv"
-
 )
 
 func main() {
@@ -15,6 +14,6 @@ func main() {
 	if err != nil {
 		neem.Critial(err, "Error loading .env file")
 	}
-	
+
 	api.Server()
 }

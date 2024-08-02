@@ -25,7 +25,7 @@ func AddBooks(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
 	}
-	
+
 	err = json.Unmarshal(body, &bookTemp)
 	if err != nil {
 		neem.Spotlight(err, "could not unmarshal book")
@@ -33,22 +33,22 @@ func AddBooks(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	duetime, err := strconv.Atoi(bookTemp.DueTime)
-		if err != nil {
-			neem.Log("could not convert DueTime to int")
-			http.Error(w, "Bad Request", http.StatusBadRequest)
-			return
-		}
+	if err != nil {
+		neem.Log("could not convert DueTime to int")
+		http.Error(w, "Bad Request", http.StatusBadRequest)
+		return
+	}
 	quantity, err := strconv.Atoi(bookTemp.Quantity)
-		if err != nil {
-			neem.Log("could not convert DueTime to int")
-			http.Error(w, "Bad Request", http.StatusBadRequest)
-			return
-		}
+	if err != nil {
+		neem.Log("could not convert DueTime to int")
+		http.Error(w, "Bad Request", http.StatusBadRequest)
+		return
+	}
 	book := types.Book{
-		Title: bookTemp.Title,
-		Genre: bookTemp.Genre,
-		Author: bookTemp.Author,
-		DueTime: duetime,
+		Title:    bookTemp.Title,
+		Genre:    bookTemp.Genre,
+		Author:   bookTemp.Author,
+		DueTime:  duetime,
 		Quantity: quantity,
 	}
 
@@ -61,7 +61,7 @@ func AddBooks(w http.ResponseWriter, r *http.Request) {
 		}
 		http.Error(w, string(b), http.StatusBadRequest)
 		return
-	
+
 	}
 	if book.DueTime <= 0 {
 		neem.Log("Quantity less than 0")
@@ -72,7 +72,7 @@ func AddBooks(w http.ResponseWriter, r *http.Request) {
 		}
 		http.Error(w, string(b), http.StatusBadRequest)
 		return
-	
+
 	}
 	success, err := models.AddBooks(book)
 	if err != nil {
@@ -136,12 +136,12 @@ func UpdateBooks(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	book := types.Book{
-		Title: bookTemp.Title,
-		Genre: bookTemp.Genre,
-		Author: bookTemp.Author,
-		DueTime: duetime,
+		Title:    bookTemp.Title,
+		Genre:    bookTemp.Genre,
+		Author:   bookTemp.Author,
+		DueTime:  duetime,
 		Quantity: quantity,
-		B_Id: bookID,
+		B_Id:     bookID,
 	}
 
 	if book.Quantity <= 0 {
@@ -153,7 +153,7 @@ func UpdateBooks(w http.ResponseWriter, r *http.Request) {
 		}
 		http.Error(w, string(b), http.StatusBadRequest)
 		return
-	
+
 	}
 	if book.DueTime <= 0 {
 		neem.Log("Quantity less than 0")
@@ -164,7 +164,7 @@ func UpdateBooks(w http.ResponseWriter, r *http.Request) {
 		}
 		http.Error(w, string(b), http.StatusBadRequest)
 		return
-	
+
 	}
 	success, err := models.UpdateBooks(book)
 	if err != nil {
@@ -239,7 +239,7 @@ func DeleteBooks(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func AcceptCheckOut(w http.ResponseWriter, r *http.Request){
+func AcceptCheckOut(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
 		return
@@ -279,7 +279,7 @@ func AcceptCheckOut(w http.ResponseWriter, r *http.Request){
 	w.Write(b)
 }
 
-func AcceptCheckIn(w http.ResponseWriter, r *http.Request){
+func AcceptCheckIn(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
 		return
@@ -319,7 +319,7 @@ func AcceptCheckIn(w http.ResponseWriter, r *http.Request){
 	w.Write(b)
 }
 
-func AcceptAdmins(w http.ResponseWriter, r *http.Request){
+func AcceptAdmins(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
 		return

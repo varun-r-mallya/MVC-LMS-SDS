@@ -7,6 +7,8 @@ CREATE TABLE IF NOT EXISTS booklist (
     NumberofCopiesAvailable int(10) unsigned DEFAULT 0,
     NumberofCopiesBorrowed int(10) unsigned DEFAULT 0,
     DueTime int(10) unsigned DEFAULT 0,
-    CONSTRAINT check_copies CHECK (NumberofCopies = NumberofCopiesAvailable + NumberofCopiesBorrowed),
+    CONSTRAINT check_copies CHECK (
+        NumberofCopies = NumberofCopiesAvailable + NumberofCopiesBorrowed
+    ),
     PRIMARY KEY (B_Id)
 );

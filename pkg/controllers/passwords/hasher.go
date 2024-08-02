@@ -4,7 +4,6 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"os"
-
 )
 
 func hashPassword(password string, salt string) (string, string) {
@@ -14,12 +13,11 @@ func hashPassword(password string, salt string) (string, string) {
 	return hashed_password, salt
 }
 
-
 func SaltingPassword(password string) (string, string) {
 	GlobalSalt := os.Getenv("GLOBALSALT")
 	salt := saltgen()
 	transformed_salt := (salt + GlobalSalt)
-	return password+transformed_salt, salt
+	return password + transformed_salt, salt
 }
 
 func PasswordTransform(password string) (string, string) {
@@ -27,7 +25,7 @@ func PasswordTransform(password string) (string, string) {
 }
 
 func ComparePasswords(password string, hashed_password string, salt string) bool {
-	
+
 	GlobalSalt := os.Getenv("GLOBALSALT")
 	transformed_salt := salt + GlobalSalt
 	password = password + transformed_salt

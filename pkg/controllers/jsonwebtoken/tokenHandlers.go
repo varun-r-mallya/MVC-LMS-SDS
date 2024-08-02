@@ -5,14 +5,13 @@ package jsonwebtoken
 import (
 	"fmt"
 	"os"
-	"time"
 	"strconv"
+	"time"
 
 	"github.com/golang-jwt/jwt/v5"
 
 	"github.com/varun-r-mallya/MVC-LMS-SDS/pkg/neem"
 	"github.com/varun-r-mallya/MVC-LMS-SDS/pkg/types"
-
 )
 
 func CreateToken(user types.CookieUser) string {
@@ -32,15 +31,13 @@ func CreateToken(user types.CookieUser) string {
 	claims["isadmin"] = user.IsAdmin
 	claims["exp"] = expirationTime
 
-
-	tokenString, err := token.SignedString([]byte(secret), )
+	tokenString, err := token.SignedString([]byte(secret))
 	if err != nil {
 		neem.Spotlight(err, "Error Signing token")
 	}
 
 	return tokenString
 }
-
 
 func ValidateToken(tokenString string) (types.CookieUser, error) {
 	neem.Log("Validating token")
@@ -52,13 +49,13 @@ func ValidateToken(tokenString string) (types.CookieUser, error) {
 	if err != nil {
 		neem.Log("Error parsing token")
 		return types.CookieUser{}, err
- 	}
+	}
 
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 		userData := types.CookieUser{
-								UserName: claims["user"].(string),
-								IsAdmin: claims["isadmin"].(bool),
-							}
+			UserName: claims["user"].(string),
+			IsAdmin:  claims["isadmin"].(bool),
+		}
 		neem.Log(fmt.Sprintf("%s %v logged in", userData.UserName, userData.IsAdmin))
 		return userData, nil
 	} else {

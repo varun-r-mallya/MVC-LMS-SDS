@@ -3,7 +3,7 @@ package controllers
 import (
 	"encoding/json"
 	"errors"
-	_"fmt"
+	_ "fmt"
 	"io"
 	"net/http"
 
@@ -98,18 +98,18 @@ func ClientDashboard(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	cookie, err := r.Cookie("token")
-    if err != nil {
+	if err != nil {
 		neem.Spotlight(err, "Error in Cookie decoding")
-        switch {
-        	case errors.Is(err, http.ErrNoCookie):
-        	    http.Redirect(w, r, "/noaccess", http.StatusFound)
-				return
-        	default:
-        	    neem.Spotlight(err, "Cookie error")
-        	    http.Redirect(w, r, "/noaccess", http.StatusFound)
-				return
-        }
-    }
+		switch {
+		case errors.Is(err, http.ErrNoCookie):
+			http.Redirect(w, r, "/noaccess", http.StatusFound)
+			return
+		default:
+			neem.Spotlight(err, "Cookie error")
+			http.Redirect(w, r, "/noaccess", http.StatusFound)
+			return
+		}
+	}
 	user, err2 := jsonwebtoken.ValidateToken(cookie.Value)
 	if err2 != nil {
 		http.Redirect(w, r, "/noaccess", http.StatusFound)
@@ -121,9 +121,9 @@ func ClientDashboard(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	pageDataClient := types.PageDataClient{
-		LibraryData: Librarydata,
-		Books: Books,
-		Transactions: transactions ,
+		LibraryData:  Librarydata,
+		Books:        Books,
+		Transactions: transactions,
 	}
 	views.ClientDashboard(w, r, pageDataClient)
 }
@@ -146,18 +146,18 @@ func ClientViewBook(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	cookie, err := r.Cookie("token")
-    if err != nil {
+	if err != nil {
 		neem.Spotlight(err, "Error in Cookie decoding")
-        switch {
-        	case errors.Is(err, http.ErrNoCookie):
-        	    http.Redirect(w, r, "/noaccess", http.StatusFound)
-				return
-        	default:
-        	    neem.Spotlight(err, "Cookie error")
-        	    http.Redirect(w, r, "/noaccess", http.StatusFound)
-				return
-        }
-    }
+		switch {
+		case errors.Is(err, http.ErrNoCookie):
+			http.Redirect(w, r, "/noaccess", http.StatusFound)
+			return
+		default:
+			neem.Spotlight(err, "Cookie error")
+			http.Redirect(w, r, "/noaccess", http.StatusFound)
+			return
+		}
+	}
 	user, err2 := jsonwebtoken.ValidateToken(cookie.Value)
 	if err2 != nil {
 		http.Redirect(w, r, "/noaccess", http.StatusFound)
@@ -169,7 +169,7 @@ func ClientViewBook(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	data := types.ClientBookView{
-		Book: bookdata,
+		Book:         bookdata,
 		Transactions: transactions,
 	}
 	views.ClientViewBook(w, r, data)

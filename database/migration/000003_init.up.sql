@@ -1,7 +1,8 @@
 CREATE TABLE transactions (
     T_Id int(10) unsigned NOT NULL AUTO_INCREMENT UNIQUE,
     username varchar(255) NOT NULL,
-    B_Id int(10) unsigned NOT NULL, -- book Identification number
+    B_Id int(10) unsigned NOT NULL,
+    -- book Identification number
     CheckOutAccepted boolean DEFAULT NULL,
     CheckInAccepted boolean DEFAULT NULL,
     DateBorrowed date DEFAULT NULL,

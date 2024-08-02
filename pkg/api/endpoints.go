@@ -8,7 +8,7 @@ import (
 	"github.com/varun-r-mallya/MVC-LMS-SDS/pkg/neem"
 )
 
-func Server(){
+func Server() {
 	http.HandleFunc("/", controllers.Homepage)
 	http.HandleFunc("/admin", controllers.Admin)
 	http.HandleFunc("/client", controllers.Client)
@@ -33,6 +33,9 @@ func Server(){
 	http.HandleFunc("/client/api/checkout", jsonwebtoken.Middleware("/client/api/checkout", controllers.HandleCheckOut))
 	http.HandleFunc("/client/api/checkin", jsonwebtoken.Middleware("/client/api/checkin", controllers.HandleCheckIn))
 	http.HandleFunc("/client/api/requestadmin", jsonwebtoken.Middleware("/client/api/requestadmin", controllers.RequestAdmin))
+
+	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("css"))))
+	http.Handle("/js/", http.StripPrefix("/js/", http.FileServer(http.Dir("js"))))
 
 	neem.Log("Find page at http://localhost:8080/ or http://xeonlib.org")
 	neem.Critial(http.ListenAndServe(":8080", nil), "Error starting server")

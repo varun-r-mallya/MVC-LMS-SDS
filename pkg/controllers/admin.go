@@ -2,16 +2,16 @@ package controllers
 
 import (
 	// "fmt"
-	"net/http"
 	"encoding/json"
-	"io"
 	"errors"
+	"io"
+	"net/http"
 
+	"github.com/varun-r-mallya/MVC-LMS-SDS/pkg/controllers/jsonwebtoken"
+	"github.com/varun-r-mallya/MVC-LMS-SDS/pkg/controllers/passwords"
 	"github.com/varun-r-mallya/MVC-LMS-SDS/pkg/models"
 	"github.com/varun-r-mallya/MVC-LMS-SDS/pkg/neem"
-	"github.com/varun-r-mallya/MVC-LMS-SDS/pkg/controllers/passwords"
 	"github.com/varun-r-mallya/MVC-LMS-SDS/pkg/types"
-	"github.com/varun-r-mallya/MVC-LMS-SDS/pkg/controllers/jsonwebtoken"
 	"github.com/varun-r-mallya/MVC-LMS-SDS/pkg/views"
 )
 
@@ -99,7 +99,7 @@ func AdminDashboard(w http.ResponseWriter, r *http.Request) {
 	}
 	pageDataAdmin := types.PageDataAdmin{
 		LibraryData: Librarydata,
-		AdminData: AdminData,
+		AdminData:   AdminData,
 	}
 	views.AdminDashboard(w, r, pageDataAdmin)
 }
@@ -122,18 +122,18 @@ func AdminViewBook(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	cookie, err := r.Cookie("token")
-    if err != nil {
+	if err != nil {
 		neem.Spotlight(err, "Error in Cookie decoding")
-        switch {
-        	case errors.Is(err, http.ErrNoCookie):
-        	    http.Redirect(w, r, "/noaccess", http.StatusFound)
-				return
-        	default:
-        	    neem.Spotlight(err, "Cookie error")
-        	    http.Redirect(w, r, "/noaccess", http.StatusFound)
-				return
-        }
-    }
+		switch {
+		case errors.Is(err, http.ErrNoCookie):
+			http.Redirect(w, r, "/noaccess", http.StatusFound)
+			return
+		default:
+			neem.Spotlight(err, "Cookie error")
+			http.Redirect(w, r, "/noaccess", http.StatusFound)
+			return
+		}
+	}
 	user, err2 := jsonwebtoken.ValidateToken(cookie.Value)
 	if err2 != nil {
 		http.Redirect(w, r, "/noaccess", http.StatusFound)
@@ -145,9 +145,9 @@ func AdminViewBook(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	data := types.AdminBookView{
-		Book: bookdata,
+		Book:         bookdata,
 		Transactions: transactions,
 	}
-	
+
 	views.AdminViewBook(w, r, data)
 }

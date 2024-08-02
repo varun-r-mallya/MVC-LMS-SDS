@@ -3,8 +3,6 @@ package passwords
 import (
 	"math/rand"
 	"time"
-
-	
 )
 
 const charset = "abcdefghijklmnopqrstuvwxyz" + "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
@@ -15,7 +13,7 @@ var seededRand *rand.Rand = rand.New(
 func StringWithCharset(length int, charset string) string {
 	b := make([]byte, length)
 	for i := range b {
-	  	b[i] = charset[seededRand.Intn(len(charset))]
+		b[i] = charset[seededRand.Intn(len(charset))]
 	}
 	return string(b)
 }
@@ -24,7 +22,7 @@ func String(length int) string {
 	return StringWithCharset(length, charset)
 }
 
-func saltgen() string{
+func saltgen() string {
 	salt := String(16)
 	return salt
 }

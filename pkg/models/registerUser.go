@@ -2,9 +2,9 @@ package models
 
 import (
 	"fmt"
-	
-	"github.com/varun-r-mallya/MVC-LMS-SDS/pkg/types"
+
 	"github.com/varun-r-mallya/MVC-LMS-SDS/pkg/neem"
+	"github.com/varun-r-mallya/MVC-LMS-SDS/pkg/types"
 
 	"github.com/go-sql-driver/mysql"
 )
@@ -30,7 +30,7 @@ func RegisterUser(user types.UserRegister) (bool, error) {
 	} else {
 		isAdmin = false
 	}
-	
+
 	_, err = db.Exec(insertSql, user.UserName, user.HashedPassword, user.Salt, isAdmin)
 	if err != nil {
 		if mysqlErr, ok := err.(*mysql.MySQLError); ok && mysqlErr.Number == 1062 {

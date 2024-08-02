@@ -8,7 +8,7 @@ import (
 	"github.com/varun-r-mallya/MVC-LMS-SDS/pkg/neem"
 	"github.com/varun-r-mallya/MVC-LMS-SDS/pkg/types"
 
-	_"github.com/go-sql-driver/mysql"
+	_ "github.com/go-sql-driver/mysql"
 )
 
 func GetLibraryData() (types.LibraryData, error) {
@@ -59,8 +59,8 @@ func GetLibraryData() (types.LibraryData, error) {
 			neem.DBError("error getting from database", err)
 			return types.LibraryData{}, fmt.Errorf("error in database")
 		}
-	} 
-		
+	}
+
 	return data, nil
 
 }
@@ -91,10 +91,10 @@ func BooksList() ([]types.Book, error) {
 
 }
 
-func GetCheckRequests() (types.AdminData, error){
+func GetCheckRequests() (types.AdminData, error) {
 	const query1 = `SELECT username FROM convertq;`
-    const query2 = `SELECT booklist.Title, transactions.* FROM transactions INNER JOIN booklist ON transactions.B_Id = booklist.B_Id WHERE CheckOutAccepted IS NULL;`;
-    const query3 = `SELECT booklist.Title, transactions.* FROM transactions INNER JOIN booklist ON transactions.B_Id = booklist.B_Id WHERE CheckInAccepted = 0 AND CheckOutAccepted = 1;`;
+	const query2 = `SELECT booklist.Title, transactions.* FROM transactions INNER JOIN booklist ON transactions.B_Id = booklist.B_Id WHERE CheckOutAccepted IS NULL;`
+	const query3 = `SELECT booklist.Title, transactions.* FROM transactions INNER JOIN booklist ON transactions.B_Id = booklist.B_Id WHERE CheckInAccepted = 0 AND CheckOutAccepted = 1;`
 	db, err := Connection()
 	if err != nil {
 		neem.Critial(err, "error connecting to the database")
@@ -126,7 +126,7 @@ func GetCheckRequests() (types.AdminData, error){
 	for rows.Next() {
 		CheckOutApproval := types.Transactions{}
 		var conv1, conv2 string
-		err := rows.Scan(&CheckOutApproval.Title, &conv1, &CheckOutApproval.UserName, &conv2, &CheckOutApproval.CheckOutAccepted, &CheckOutApproval.CheckOutAccepted, &CheckOutApproval.DateBorrowed, &CheckOutApproval.DateReturned, &CheckOutApproval.OverdueFine)		
+		err := rows.Scan(&CheckOutApproval.Title, &conv1, &CheckOutApproval.UserName, &conv2, &CheckOutApproval.CheckOutAccepted, &CheckOutApproval.CheckOutAccepted, &CheckOutApproval.DateBorrowed, &CheckOutApproval.DateReturned, &CheckOutApproval.OverdueFine)
 		if err != nil {
 			neem.DBError("error scanning row", err)
 			return types.AdminData{}, err
@@ -153,7 +153,7 @@ func GetCheckRequests() (types.AdminData, error){
 	for rows.Next() {
 		CheckInApproval := types.Transactions{}
 		var conv1, conv2 string
-		err := rows.Scan(&CheckInApproval.Title, &conv1, &CheckInApproval.UserName, &conv2, &CheckInApproval.CheckOutAccepted, &CheckInApproval.CheckOutAccepted, &CheckInApproval.DateBorrowed, &CheckInApproval.DateReturned, &CheckInApproval.OverdueFine)		
+		err := rows.Scan(&CheckInApproval.Title, &conv1, &CheckInApproval.UserName, &conv2, &CheckInApproval.CheckOutAccepted, &CheckInApproval.CheckOutAccepted, &CheckInApproval.DateBorrowed, &CheckInApproval.DateReturned, &CheckInApproval.OverdueFine)
 		if err != nil {
 			neem.DBError("error scanning row", err)
 			return types.AdminData{}, err
@@ -170,7 +170,7 @@ func GetCheckRequests() (types.AdminData, error){
 		}
 		CheckInApprovals = append(CheckInApprovals, CheckInApproval)
 	}
-	return types.AdminData{ConvertRequestClients: CliReq, CheckInApprovals: CheckInApprovals , CheckOutApprovals: CheckOutApprovals}, nil
+	return types.AdminData{ConvertRequestClients: CliReq, CheckInApprovals: CheckInApprovals, CheckOutApprovals: CheckOutApprovals}, nil
 }
 
 func GetBook(title string) (types.Book, error) {
@@ -221,15 +221,15 @@ func ClientTransactions(user types.CookieUser) ([]types.ClientBookViewTransactio
 		var stringDateBorrowed string = string([]byte(transaction.DateBorrowed))
 		var stringDateReturned string = string([]byte(transaction.DateReturned))
 		transactionInterpretable := types.ClientBookViewTransactionsInterpretable{
-			Title: transaction.Title,
-			UserName: transaction.UserName,
-			CheckInAccepted: fmt.Sprintf("%v", transaction.CheckInAccepted),
+			Title:            transaction.Title,
+			UserName:         transaction.UserName,
+			CheckInAccepted:  fmt.Sprintf("%v", transaction.CheckInAccepted),
 			CheckOutAccepted: fmt.Sprintf("%v", transaction.CheckOutAccepted),
-			DateBorrowed: fmt.Sprintf("%v", stringDateBorrowed),
-			DateReturned: fmt.Sprintf("%v", stringDateReturned),
-			DueTime: fmt.Sprintf("%v", transaction.DueTime),
-			OverdueFine: fmt.Sprintf("%v", transaction.OverdueFine),
-			Author: transaction.Author,
+			DateBorrowed:     fmt.Sprintf("%v", stringDateBorrowed),
+			DateReturned:     fmt.Sprintf("%v", stringDateReturned),
+			DueTime:          fmt.Sprintf("%v", transaction.DueTime),
+			OverdueFine:      fmt.Sprintf("%v", transaction.OverdueFine),
+			Author:           transaction.Author,
 		}
 		transactions = append(transactions, transactionInterpretable)
 	}
@@ -260,15 +260,15 @@ func ClientPerBookTransactions(user types.CookieUser, bookId int) ([]types.Clien
 		var stringDateBorrowed string = string([]byte(transaction.DateBorrowed))
 		var stringDateReturned string = string([]byte(transaction.DateReturned))
 		transactionInterpretable := types.ClientBookViewTransactionsInterpretable{
-			Title: transaction.Title,
-			UserName: transaction.UserName,
-			CheckInAccepted: fmt.Sprintf("%v", transaction.CheckInAccepted),
+			Title:            transaction.Title,
+			UserName:         transaction.UserName,
+			CheckInAccepted:  fmt.Sprintf("%v", transaction.CheckInAccepted),
 			CheckOutAccepted: fmt.Sprintf("%v", transaction.CheckOutAccepted),
-			DateBorrowed: fmt.Sprintf("%v", stringDateBorrowed),
-			DateReturned: fmt.Sprintf("%v", stringDateReturned),
-			DueTime: fmt.Sprintf("%v", transaction.DueTime),
-			OverdueFine: fmt.Sprintf("%v", transaction.OverdueFine),
-			Author: transaction.Author,
+			DateBorrowed:     fmt.Sprintf("%v", stringDateBorrowed),
+			DateReturned:     fmt.Sprintf("%v", stringDateReturned),
+			DueTime:          fmt.Sprintf("%v", transaction.DueTime),
+			OverdueFine:      fmt.Sprintf("%v", transaction.OverdueFine),
+			Author:           transaction.Author,
 		}
 		transactions = append(transactions, transactionInterpretable)
 	}

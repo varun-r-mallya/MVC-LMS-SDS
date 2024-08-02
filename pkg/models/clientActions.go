@@ -1,17 +1,16 @@
 package models
 
 import (
-	"fmt"
 	"database/sql"
-	
-	"github.com/varun-r-mallya/MVC-LMS-SDS/pkg/types"
+	"fmt"
+
 	"github.com/varun-r-mallya/MVC-LMS-SDS/pkg/neem"
+	"github.com/varun-r-mallya/MVC-LMS-SDS/pkg/types"
 
 	"github.com/go-sql-driver/mysql"
-
 )
 
-func FlipAdmin(user types.CookieUser) (error) {
+func FlipAdmin(user types.CookieUser) error {
 	db, err := Connection()
 	if err != nil {
 		neem.Critial(err, "error connecting to the database")
@@ -40,10 +39,10 @@ func RequestCheckOut(user types.CookieUser, bookId int) (string, error) {
 		neem.Critial(err, "error connecting to the database")
 		return "", err
 	}
-	query := `SELECT NumberofCopiesAvailable FROM booklist WHERE B_Id = (?);`;
-    query2 := `SELECT COUNT(*) FROM transactions WHERE username = (?) AND B_Id = (?) AND ((CheckOutAccepted = 1 AND CheckInAccepted IS NULL) OR (CheckOutAccepted = 1 AND CheckInAccepted = 0) OR (CheckOutAccepted IS NULL AND CheckInAccepted IS NULL));`;
-    query3 := `INSERT INTO transactions (username, B_Id) VALUES ((?), (?));`;
-	
+	query := `SELECT NumberofCopiesAvailable FROM booklist WHERE B_Id = (?);`
+	query2 := `SELECT COUNT(*) FROM transactions WHERE username = (?) AND B_Id = (?) AND ((CheckOutAccepted = 1 AND CheckInAccepted IS NULL) OR (CheckOutAccepted = 1 AND CheckInAccepted = 0) OR (CheckOutAccepted IS NULL AND CheckInAccepted IS NULL));`
+	query3 := `INSERT INTO transactions (username, B_Id) VALUES ((?), (?));`
+
 	var numberofcopiesavailable int
 	err = db.QueryRow(query, bookId).Scan(&numberofcopiesavailable)
 	if err != nil {
@@ -61,7 +60,7 @@ func RequestCheckOut(user types.CookieUser, bookId int) (string, error) {
 			neem.Log("No Transaction for user present in database")
 			return "No trasactions present for user", fmt.Errorf("no trasactions present for user")
 		} else {
-		return "Error in Database", fmt.Errorf("error in database")
+			return "Error in Database", fmt.Errorf("error in database")
 		}
 	}
 	if count > 0 {
@@ -84,9 +83,9 @@ func RequestCheckIn(user types.CookieUser, bookId int) (string, error) {
 		neem.Critial(err, "error connecting to the database")
 		return "", err
 	}
-	query := `SELECT COUNT(*) FROM transactions WHERE username = (?) AND B_Id = (?) AND CheckOutAccepted = 1 AND CheckInAccepted IS NULL OR CheckInAccepted != 1;`;
-    query2 := `UPDATE transactions SET CheckInAccepted = 0 WHERE T_Id IN (SELECT T_Id FROM (SELECT MAX(T_Id) AS T_Id FROM transactions WHERE username = ? AND B_Id = ?) AS subquery);`;
-	
+	query := `SELECT COUNT(*) FROM transactions WHERE username = (?) AND B_Id = (?) AND CheckOutAccepted = 1 AND CheckInAccepted IS NULL OR CheckInAccepted != 1;`
+	query2 := `UPDATE transactions SET CheckInAccepted = 0 WHERE T_Id IN (SELECT T_Id FROM (SELECT MAX(T_Id) AS T_Id FROM transactions WHERE username = ? AND B_Id = ?) AS subquery);`
+
 	var count int
 	err = db.QueryRow(query, user.UserName, bookId).Scan(&count)
 	if err != nil {
@@ -95,7 +94,7 @@ func RequestCheckIn(user types.CookieUser, bookId int) (string, error) {
 			neem.Log("No Transaction for user present in database")
 			return "No trasactions present for user", fmt.Errorf("no trasactions present for user")
 		} else {
-		return "Error in Database", fmt.Errorf("error in database")
+			return "Error in Database", fmt.Errorf("error in database")
 		}
 	}
 	if count == 0 {

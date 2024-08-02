@@ -13,20 +13,20 @@ import (
 	"github.com/varun-r-mallya/MVC-LMS-SDS/pkg/types"
 )
 
-func cookieUserDetector(w http.ResponseWriter, r *http.Request) (types.CookieUser, error){
+func cookieUserDetector(w http.ResponseWriter, r *http.Request) (types.CookieUser, error) {
 	cookie, err := r.Cookie("token")
-    if err != nil {
+	if err != nil {
 		neem.Spotlight(err, "Error in Cookie decoding")
-        switch {
-        	case errors.Is(err, http.ErrNoCookie):
-        	    http.Redirect(w, r, "/noaccess", http.StatusFound)
-				return types.CookieUser{}, errors.New("no cookie")
-        	default:
-        	    neem.Spotlight(err, "Cookie error")
-        	    http.Redirect(w, r, "/noaccess", http.StatusFound)
-				return types.CookieUser{}, errors.New("cookie error")
-        }
-    }
+		switch {
+		case errors.Is(err, http.ErrNoCookie):
+			http.Redirect(w, r, "/noaccess", http.StatusFound)
+			return types.CookieUser{}, errors.New("no cookie")
+		default:
+			neem.Spotlight(err, "Cookie error")
+			http.Redirect(w, r, "/noaccess", http.StatusFound)
+			return types.CookieUser{}, errors.New("cookie error")
+		}
+	}
 	user, err2 := jsonwebtoken.ValidateToken(cookie.Value)
 	if err2 != nil {
 		http.Redirect(w, r, "/noaccess", http.StatusFound)
@@ -69,18 +69,18 @@ func HandleCheckOut(w http.ResponseWriter, r *http.Request) {
 	}
 	neem.Log("Client checkout accessed")
 	cookie, err := r.Cookie("token")
-    if err != nil {
+	if err != nil {
 		neem.Spotlight(err, "Error in Cookie decoding")
-        switch {
-        	case errors.Is(err, http.ErrNoCookie):
-        	    http.Redirect(w, r, "/noaccess", http.StatusFound)
-				return
-        	default:
-        	    neem.Spotlight(err, "Cookie error")
-        	    http.Redirect(w, r, "/noaccess", http.StatusFound)
-				return
-        }
-    }
+		switch {
+		case errors.Is(err, http.ErrNoCookie):
+			http.Redirect(w, r, "/noaccess", http.StatusFound)
+			return
+		default:
+			neem.Spotlight(err, "Cookie error")
+			http.Redirect(w, r, "/noaccess", http.StatusFound)
+			return
+		}
+	}
 	user, err2 := jsonwebtoken.ValidateToken(cookie.Value)
 	if err2 != nil {
 		http.Redirect(w, r, "/noaccess", http.StatusFound)
@@ -119,7 +119,6 @@ func HandleCheckOut(w http.ResponseWriter, r *http.Request) {
 	w.Write(b)
 }
 
-
 func HandleCheckIn(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
@@ -127,18 +126,18 @@ func HandleCheckIn(w http.ResponseWriter, r *http.Request) {
 	}
 	neem.Log("Client checkin accessed")
 	cookie, err := r.Cookie("token")
-    if err != nil {
+	if err != nil {
 		neem.Spotlight(err, "Error in Cookie decoding")
-        switch {
-        	case errors.Is(err, http.ErrNoCookie):
-        	    http.Redirect(w, r, "/noaccess", http.StatusFound)
-				return
-        	default:
-        	    neem.Spotlight(err, "Cookie error")
-        	    http.Redirect(w, r, "/noaccess", http.StatusFound)
-				return
-        }
-    }
+		switch {
+		case errors.Is(err, http.ErrNoCookie):
+			http.Redirect(w, r, "/noaccess", http.StatusFound)
+			return
+		default:
+			neem.Spotlight(err, "Cookie error")
+			http.Redirect(w, r, "/noaccess", http.StatusFound)
+			return
+		}
+	}
 	user, err2 := jsonwebtoken.ValidateToken(cookie.Value)
 	if err2 != nil {
 		http.Redirect(w, r, "/noaccess", http.StatusFound)

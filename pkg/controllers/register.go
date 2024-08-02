@@ -4,11 +4,11 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/varun-r-mallya/MVC-LMS-SDS/pkg/controllers/passwords"
 	"github.com/varun-r-mallya/MVC-LMS-SDS/pkg/models"
 	"github.com/varun-r-mallya/MVC-LMS-SDS/pkg/neem"
-	"github.com/varun-r-mallya/MVC-LMS-SDS/pkg/views"
 	"github.com/varun-r-mallya/MVC-LMS-SDS/pkg/types"
-	"github.com/varun-r-mallya/MVC-LMS-SDS/pkg/controllers/passwords"
+	"github.com/varun-r-mallya/MVC-LMS-SDS/pkg/views"
 )
 
 func Register(w http.ResponseWriter, r *http.Request) {
