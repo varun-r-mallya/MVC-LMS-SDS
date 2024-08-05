@@ -16,9 +16,9 @@ func GetUser(UserName string) (types.User, error) {
 		neem.Critial(err, "error connecting to the database")
 		return types.User{}, err
 	}
-	getSql := "SELECT * FROM userlist WHERE username = ?"
+	GetUserFromUserList := "SELECT * FROM userlist WHERE username = ?"
 	var user types.User
-	err = db.QueryRow(getSql, UserName).Scan(&user.UserName, &user.HashedPassword, &user.Salt, &user.IsAdmin)
+	err = db.QueryRow(GetUserFromUserList, UserName).Scan(&user.UserName, &user.HashedPassword, &user.Salt, &user.IsAdmin)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			neem.Log("User not present in database")

@@ -15,8 +15,8 @@ func AddBooks(book types.Book) (bool, error) {
 		neem.Critial(err, "error connecting to the database")
 		return false, err
 	}
-	insertSql := "INSERT INTO booklist (Title, Author, Genre, NumberofCopies, NumberofCopiesAvailable, NumberofCopiesBorrowed, DueTime) VALUES (?, ?, ?, ?, ?, ?, ?);"
-	_, err = db.Exec(insertSql, book.Title, book.Author, book.Genre, book.Quantity, book.Quantity, 0, book.DueTime)
+	insertBookIntoBookList := "INSERT INTO booklist (Title, Author, Genre, NumberofCopies, NumberofCopiesAvailable, NumberofCopiesBorrowed, DueTime) VALUES (?, ?, ?, ?, ?, ?, ?);"
+	_, err = db.Exec(insertBookIntoBookList, book.Title, book.Author, book.Genre, book.Quantity, book.Quantity, 0, book.DueTime)
 	if err != nil {
 		if mysqlErr, ok := err.(*mysql.MySQLError); ok && mysqlErr.Number == 1062 {
 			neem.Log("Duplicate entry in books")
@@ -38,8 +38,8 @@ func UpdateBooks(book types.Book) (bool, error) {
 		neem.Critial(err, "error connecting to the database")
 		return false, err
 	}
-	updateSql := "UPDATE booklist SET Title = ?, Author = ?, Genre = ?, NumberofCopies = ?, NumberofCopiesAvailable = ?, NumberofCopiesBorrowed = ?, DueTime = ? WHERE B_Id = ?;"
-	_, err = db.Exec(updateSql, book.Title, book.Author, book.Genre, book.Quantity, book.Quantity, book.NumberofCopiesBorrowed, book.DueTime, book.B_Id)
+	UpdateBookList := "UPDATE booklist SET Title = ?, Author = ?, Genre = ?, NumberofCopies = ?, NumberofCopiesAvailable = ?, NumberofCopiesBorrowed = ?, DueTime = ? WHERE B_Id = ?;"
+	_, err = db.Exec(UpdateBookList, book.Title, book.Author, book.Genre, book.Quantity, book.Quantity, book.NumberofCopiesBorrowed, book.DueTime, book.B_Id)
 	if err != nil {
 		neem.DBError("error updating the database", err)
 		return false, fmt.Errorf("error in database")
@@ -56,9 +56,9 @@ func DeleteBooks(bookID int) (bool, error) {
 		neem.Critial(err, "error connecting to the database")
 		return false, err
 	}
-	check0Sql := "SELECT NumberofCopiesBorrowed FROM booklist WHERE B_Id = ?"
+	CheckNumberOfCopiesBorrowed := "SELECT NumberofCopiesBorrowed FROM booklist WHERE B_Id = ?"
 	var numberofcopiesborrowed int
-	err = db.QueryRow(check0Sql, bookID).Scan(&numberofcopiesborrowed)
+	err = db.QueryRow(CheckNumberOfCopiesBorrowed, bookID).Scan(&numberofcopiesborrowed)
 	if err != nil {
 		neem.DBError("error checking the database", err)
 		return false, fmt.Errorf("error in database")
@@ -67,14 +67,14 @@ func DeleteBooks(bookID int) (bool, error) {
 		neem.Log("Book has been borrowed")
 		return false, fmt.Errorf("book has been borrowed")
 	}
-	checkSql := "DELETE FROM transactions WHERE B_Id = ?"
-	_, err = db.Exec(checkSql, bookID)
+	DeleteTransaction := "DELETE FROM transactions WHERE B_Id = ?"
+	_, err = db.Exec(DeleteTransaction, bookID)
 	if err != nil {
 		neem.DBError("error checking the database", err)
 		return false, fmt.Errorf("error in database")
 	}
-	deleteSql := "DELETE FROM booklist WHERE B_Id = ?"
-	_, err = db.Exec(deleteSql, bookID)
+	DeleteBookFinal := "DELETE FROM booklist WHERE B_Id = ?"
+	_, err = db.Exec(DeleteBookFinal, bookID)
 	if err != nil {
 		neem.DBError("error deleting from the database", err)
 		return false, fmt.Errorf("error in database")
@@ -92,22 +92,22 @@ func AcceptCheckOut(checkout types.CheckOut) (string, error) {
 		return "Error connecting to the database", err
 	}
 	if !checkout.Accepted {
-		updateSql := "UPDATE transactions SET DateBorrowed = CURDATE(), CheckOutAccepted = 0 WHERE T_Id = ?;"
-		_, err := db.Query(updateSql, checkout.T_Id)
+		RemoveCheckout := "UPDATE transactions SET DateBorrowed = CURDATE(), CheckOutAccepted = 0 WHERE T_Id = ?;"
+		_, err := db.Query(RemoveCheckout, checkout.T_Id)
 		if err != nil {
 			neem.DBError("error updating the database", err)
 			return "Error updating the database", err
 		}
 		return "Checkout rejected", nil
 	} else {
-		updateSql := "UPDATE transactions SET DateBorrowed = CURDATE(), CheckOutAccepted = 1 WHERE T_Id = ?;"
-		updateSql2 := "UPDATE booklist SET NumberofCopiesBorrowed = NumberofCopiesBorrowed + 1, NumberofCopiesAvailable = NumberofCopiesAvailable - 1 WHERE B_Id = (SELECT B_Id FROM transactions WHERE T_Id = (?));"
-		_, err := db.Query(updateSql, checkout.T_Id)
+		AcceptCheckoutQuery := "UPDATE transactions SET DateBorrowed = CURDATE(), CheckOutAccepted = 1 WHERE T_Id = ?;"
+		EnsureParityQuery := "UPDATE booklist SET NumberofCopiesBorrowed = NumberofCopiesBorrowed + 1, NumberofCopiesAvailable = NumberofCopiesAvailable - 1 WHERE B_Id = (SELECT B_Id FROM transactions WHERE T_Id = (?));"
+		_, err := db.Query(AcceptCheckoutQuery, checkout.T_Id)
 		if err != nil {
 			neem.DBError("error updating the database", err)
 			return "Error updating the database", err
 		}
-		_, err = db.Query(updateSql2, checkout.T_Id)
+		_, err = db.Query(EnsureParityQuery, checkout.T_Id)
 		if err != nil {
 			neem.DBError("error updating the database", err)
 			return "Error updating the database", err
@@ -124,23 +124,23 @@ func AcceptCheckIn(checkout types.CheckIn) (string, error) {
 		return "Error connecting to the database", err
 	}
 	if !checkout.Accepted {
-		updateSql := "UPDATE transactions SET CheckInAccepted = NULL WHERE T_Id = ?;"
-		_, err := db.Query(updateSql, checkout.T_Id)
+		RemoveCheckoutQuery := "UPDATE transactions SET CheckInAccepted = NULL WHERE T_Id = ?;"
+		_, err := db.Query(RemoveCheckoutQuery, checkout.T_Id)
 		if err != nil {
 			neem.DBError("error updating the database", err)
 			return "Error updating the database", err
 		}
 		return "Checkin rejected", nil
 	} else {
-		updateSql := "UPDATE transactions SET DateReturned = CURDATE(), CheckInAccepted = 1 WHERE T_Id = ?;"
-		updateSql2 := "UPDATE booklist SET NumberofCopiesAvailable = NumberofCopiesAvailable + 1, NumberofCopiesBorrowed = NumberofCopiesBorrowed - 1 WHERE B_Id = (SELECT B_Id FROM transactions WHERE T_Id = ?);"
+		AcceptCheckOutQuery := "UPDATE transactions SET DateReturned = CURDATE(), CheckInAccepted = 1 WHERE T_Id = ?;"
+		EnsureParityQuery := "UPDATE booklist SET NumberofCopiesAvailable = NumberofCopiesAvailable + 1, NumberofCopiesBorrowed = NumberofCopiesBorrowed - 1 WHERE B_Id = (SELECT B_Id FROM transactions WHERE T_Id = ?);"
 		//updateSql3 := "UPDATE TRANSACTIONS SET OverDueFine = ((DATEDIFF(CURDATE(), DateBorrowed) -  (SELECT NumberofDays FROM BOOKLIST WHERE B_Id = (SELECT B_Id FROM TRANSACTIONS WHERE T_Id = ${T_Id}))) * ${process.env.FINEPERDAY} WHERE T_Id = ${T_Id} AND DATEDIFF(CURDATE(), DateBorrowed) > (SELECT NumberofDays FROM BOOKLIST WHERE B_Id =  (SELECT B_Id FROM TRANSACTIONS WHERE T_Id = ${T_Id}));"
-		_, err := db.Query(updateSql, checkout.T_Id)
+		_, err := db.Query(AcceptCheckOutQuery, checkout.T_Id)
 		if err != nil {
 			neem.DBError("error updating the database", err)
 			return "Error updating the database", err
 		}
-		_, err = db.Query(updateSql2, checkout.T_Id)
+		_, err = db.Query(EnsureParityQuery, checkout.T_Id)
 		if err != nil {
 			neem.DBError("error updating the database", err)
 			return "Error updating the database", err
@@ -157,22 +157,22 @@ func AcceptAdmins(accept types.AcceptAdmins) (string, error) {
 		return "Error connecting to the database", err
 	}
 	if !accept.Accepted {
-		deleteSql := "DELETE FROM convertq WHERE username = ?"
-		_, err := db.Query(deleteSql, accept.UserName)
+		ConvertFromAdminConverterList := "DELETE FROM convertq WHERE username = ?"
+		_, err := db.Query(ConvertFromAdminConverterList, accept.UserName)
 		if err != nil {
 			neem.DBError("error updating the database", err)
 			return "Error updating the database", err
 		}
 		return "Admin not accepted", nil
 	} else {
-		updateSql := "UPDATE userlist SET isadmin = 1 WHERE username = ?;"
-		_, err := db.Query(updateSql, accept.UserName)
+		UpdateUserList := "UPDATE userlist SET isadmin = 1 WHERE username = ?;"
+		_, err := db.Query(UpdateUserList, accept.UserName)
 		if err != nil {
 			neem.DBError("error updating the database", err)
 			return "Error updating the database", err
 		}
-		deleteSql := "DELETE FROM convertq WHERE username = ?"
-		_, err1 := db.Query(deleteSql, accept.UserName)
+		DeleteFromConverterQueue := "DELETE FROM convertq WHERE username = ?"
+		_, err1 := db.Query(DeleteFromConverterQueue, accept.UserName)
 		if err1 != nil {
 			neem.DBError("error updating the database", err)
 			return "Error updating the database", err

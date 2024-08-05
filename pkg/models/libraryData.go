@@ -92,15 +92,15 @@ func BooksList() ([]types.Book, error) {
 }
 
 func GetCheckRequests() (types.AdminData, error) {
-	const query1 = `SELECT username FROM convertq;`
-	const query2 = `SELECT booklist.Title, transactions.* FROM transactions INNER JOIN booklist ON transactions.B_Id = booklist.B_Id WHERE CheckOutAccepted IS NULL;`
-	const query3 = `SELECT booklist.Title, transactions.* FROM transactions INNER JOIN booklist ON transactions.B_Id = booklist.B_Id WHERE CheckInAccepted = 0 AND CheckOutAccepted = 1;`
+	const SelectFromConverterQueue = `SELECT username FROM convertq;`
+	const GetTransactions = `SELECT booklist.Title, transactions.* FROM transactions INNER JOIN booklist ON transactions.B_Id = booklist.B_Id WHERE CheckOutAccepted IS NULL;`
+	const GetRelavantTransactions = `SELECT booklist.Title, transactions.* FROM transactions INNER JOIN booklist ON transactions.B_Id = booklist.B_Id WHERE CheckInAccepted = 0 AND CheckOutAccepted = 1;`
 	db, err := Connection()
 	if err != nil {
 		neem.Critial(err, "error connecting to the database")
 		return types.AdminData{}, err
 	}
-	rows, err := db.Query(query1)
+	rows, err := db.Query(SelectFromConverterQueue)
 	if err != nil {
 		neem.DBError("error executing query", err)
 		return types.AdminData{}, err
@@ -116,7 +116,7 @@ func GetCheckRequests() (types.AdminData, error) {
 		}
 		CliReq = append(CliReq, UserName)
 	}
-	rows, err = db.Query(query2)
+	rows, err = db.Query(GetTransactions)
 	if err != nil {
 		neem.DBError("error executing query", err)
 		return types.AdminData{}, err
@@ -143,7 +143,7 @@ func GetCheckRequests() (types.AdminData, error) {
 		}
 		CheckOutApprovals = append(CheckOutApprovals, CheckOutApproval)
 	}
-	rows, err = db.Query(query3)
+	rows, err = db.Query(GetRelavantTransactions)
 	if err != nil {
 		neem.DBError("error executing query", err)
 		return types.AdminData{}, err

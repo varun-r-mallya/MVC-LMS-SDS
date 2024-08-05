@@ -15,10 +15,10 @@ func RegisterUser(user types.UserRegister) (bool, error) {
 		neem.Critial(err, "error %s connecting to the database")
 		return false, err
 	}
-	insertSql := "INSERT INTO userlist (username, hashedpassword, salt, isadmin) VALUES (?, ?, ?, ?)"
-	checkSql := "SELECT COUNT(*) FROM userlist"
+	InsertIntoUserlist := "INSERT INTO userlist (username, hashedpassword, salt, isadmin) VALUES (?, ?, ?, ?)"
+	CountInUserlist := "SELECT COUNT(*) FROM userlist"
 	var count int
-	err = db.QueryRow(checkSql).Scan(&count)
+	err = db.QueryRow(CountInUserlist).Scan(&count)
 	if err != nil {
 		neem.DBError("error checking the database", err)
 		return false, fmt.Errorf("error in database")
@@ -31,7 +31,7 @@ func RegisterUser(user types.UserRegister) (bool, error) {
 		isAdmin = false
 	}
 
-	_, err = db.Exec(insertSql, user.UserName, user.HashedPassword, user.Salt, isAdmin)
+	_, err = db.Exec(InsertIntoUserlist, user.UserName, user.HashedPassword, user.Salt, isAdmin)
 	if err != nil {
 		if mysqlErr, ok := err.(*mysql.MySQLError); ok && mysqlErr.Number == 1062 {
 			neem.Log("Duplicate entry in registration")
